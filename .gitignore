@@ -1,32 +1,22 @@
-# Prerequisites
-*.d
+################################################################################
+# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
+################################################################################
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+bin/
+obj/
+/packages/
+/Output/
+Debug/
+/.idea/
+/.vs/
+/ipch/
+*.suo
+*.user
+*.DotSettings*
+*.dgml
+*.VC.opendb
+*.VC.db
+*.idb
+*.sdf
+*.tlog
+*.meta
