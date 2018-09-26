@@ -8,7 +8,7 @@ namespace Septera
     {
         public static readonly TextTarget Instance = new TextTarget();
 
-        public void Write(ArraySegment<Byte> segment, String outputPath)
+        public void Write(ArraySegment<Byte> segment, String outputPath, UInt16 expectedVersion)
         {
             StringBuilder sb = new StringBuilder(4096);
 

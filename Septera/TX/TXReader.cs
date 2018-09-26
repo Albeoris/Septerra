@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Septera
 {
-    public struct TXReader
+    public sealed class TXReader
     {
         public const UInt32 MagicNumber = 0x30305854;
 

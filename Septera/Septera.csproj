@@ -48,25 +48,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CopyTarget.cs" />
-    <Compile Include="DbExtractor.cs" />
-    <Compile Include="DbPackage.cs" />
-    <Compile Include="ExtensionMethodsRegex.cs" />
-    <Compile Include="IdxContent.cs" />
-    <Compile Include="IdxEntry.cs" />
-    <Compile Include="IdxReader.cs" />
-    <Compile Include="IdxStruct.cs" />
-    <Compile Include="ITarget.cs" />
-    <Compile Include="MftContent.cs" />
-    <Compile Include="MftReader.cs" />
+    <Compile Include="Utils\Asserts.cs" />
+    <Compile Include="Targets\CopyTarget.cs" />
+    <Compile Include="DB\DbExtractor.cs" />
+    <Compile Include="DB\DbPackage.cs" />
+    <Compile Include="Utils\ExtensionMethodsRegex.cs" />
+    <Compile Include="Utils\ExtensionMethodsStream.cs" />
+    <Compile Include="GV\GVHeaderEntry.cs" />
+    <Compile Include="GV\GVReader.cs" />
+    <Compile Include="Targets\GVTarget.cs" />
+    <Compile Include="Idx\IdxContent.cs" />
+    <Compile Include="Idx\IdxEntry.cs" />
+    <Compile Include="Idx\IdxReader.cs" />
+    <Compile Include="Idx\IdxStruct.cs" />
+    <Compile Include="Targets\ITarget.cs" />
+    <Compile Include="Mft\MftContent.cs" />
+    <Compile Include="Mft\MftReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramArguments.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TerrabuilderVersion.cs" />
-    <Compile Include="TextTarget.cs" />
-    <Compile Include="TXEncoding.cs" />
-    <Compile Include="TXEntry.cs" />
-    <Compile Include="TXReader.cs" />
+    <Compile Include="Mft\TerrabuilderVersion.cs" />
+    <Compile Include="Targets\TextTarget.cs" />
+    <Compile Include="TX\TXEncoding.cs" />
+    <Compile Include="TX\TXEntry.cs" />
+    <Compile Include="TX\TXReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

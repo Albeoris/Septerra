@@ -200,9 +200,10 @@ namespace Septera
             if (entry.CompressedSize < 8)
                 throw new NotSupportedException($"Compressed size is too small: {entry.CompressedSize}");
 
+            UInt16 version = UInt16.MaxValue;
             void CheckVersion(String name, Int32 supported)
             {
-                Int32 version = Int32.Parse(Encoding.ASCII.GetString(buff, 2, 2), NumberStyles.Integer, CultureInfo.InvariantCulture);
+                version = UInt16.Parse(Encoding.ASCII.GetString(buff, 2, 2), NumberStyles.Integer, CultureInfo.InvariantCulture);
                 if (version != supported)
                     throw new NotSupportedException($"Invalid {name} version: {version}. Expected: {supported}");
             }
@@ -232,7 +233,7 @@ namespace Septera
                 case "GV":
                     CheckVersion(magicTag, _version.GV);
                     outputPath = GetOutputPath(magicTag);
-                    target = CopyTarget.Instance;
+                    target = GVTarget.Instance;
                     break;
                 case "TX":
                     CheckVersion(magicTag, _version.TX);
@@ -268,7 +269,7 @@ namespace Septera
             Directory.CreateDirectory(directoryPath);
 
             ArraySegment<Byte> segment = new ArraySegment<Byte>(buff, 0, entry.UncompressedSize);
-            target.Write(segment, outputPath);
+            target.Write(segment, outputPath, version);
         }
     }
 }
