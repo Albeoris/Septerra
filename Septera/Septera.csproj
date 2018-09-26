@@ -48,6 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IL\ILHeaderEntry.cs" />
+    <Compile Include="IL\ILReader.cs" />
+    <Compile Include="IL\ILValueEntry.cs" />
+    <Compile Include="Targets\ILTarget.cs" />
     <Compile Include="Utils\Asserts.cs" />
     <Compile Include="Targets\CopyTarget.cs" />
     <Compile Include="DB\DbExtractor.cs" />

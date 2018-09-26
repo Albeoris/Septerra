@@ -161,7 +161,7 @@ namespace Septera
                 entry.Size = 12;
                 return true;
             }
-            
+
             if (i == 522 && entry.Offset == 6544 && entry.Size == 12)
             {
                 entry.Size = 11;
@@ -173,7 +173,7 @@ namespace Septera
                 entry.Offset = 6555;
                 return true;
             }
-            
+
             if (i == 524 && entry.Offset == 6567 && entry.Size == 11)
             {
                 entry.Offset = 6566;

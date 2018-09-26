@@ -248,7 +248,7 @@ namespace Septera
                 case "IL":
                     CheckVersion(magicTag, _version.IL);
                     outputPath = GetOutputPath(magicTag);
-                    target = CopyTarget.Instance;
+                    target = ILTarget.Instance;
                     break;
                 case "VS":
                     outputPath = GetOutputPath("vssf");
