@@ -86,7 +86,7 @@ namespace Septera
                 case 0x01:
                     displayType = "BOOL";
                     displayValue = value == 0 ? "false" : "true";
-                    break;
+                    return;
                 case 0xFF:
                     displayType = "INT8";
                     break;
