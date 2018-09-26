@@ -260,7 +260,7 @@ namespace Septera
                         throw new NotSupportedException($"Invalid magic number: {Encoding.ASCII.GetString(buff, 0, 8)}");
 
                     directoryPath = _outputDirectory;
-                    outputPath = GetOutputPath("qt");
+                    outputPath = Path.Combine(directoryPath, $"{entry.Id:D4}_{package.Name}.qt");
                     target = CopyTarget.Instance;
                     break;
                 }
