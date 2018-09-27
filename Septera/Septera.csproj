@@ -48,6 +48,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CH\CHHeader.cs" />
+    <Compile Include="CH\CHReader.cs" />
+    <Compile Include="CH\CHSegment1.cs" />
+    <Compile Include="CH\CHSegment10.cs" />
+    <Compile Include="CH\CHSegment11.cs" />
+    <Compile Include="CH\CHSegment12.cs" />
+    <Compile Include="CH\CHSegment2.cs" />
+    <Compile Include="CH\CHSegment3.cs" />
+    <Compile Include="CH\CHTextureNames.cs" />
+    <Compile Include="CH\CHSegment5.cs" />
+    <Compile Include="CH\CHSegment6.cs" />
+    <Compile Include="CH\CHSegment7.cs" />
+    <Compile Include="CH\CHSegment8.cs" />
+    <Compile Include="CH\CHSegmentHeader.cs" />
+    <Compile Include="CH\CHSegmentSkillName.cs" />
     <Compile Include="IL\ILHeaderEntry.cs" />
     <Compile Include="IL\ILReader.cs" />
     <Compile Include="IL\ILValueEntry.cs" />
@@ -56,6 +71,7 @@
     <Compile Include="Targets\CopyTarget.cs" />
     <Compile Include="DB\DbExtractor.cs" />
     <Compile Include="DB\DbPackage.cs" />
+    <Compile Include="Utils\DisposableAction.cs" />
     <Compile Include="Utils\ExtensionMethodsRegex.cs" />
     <Compile Include="Utils\ExtensionMethodsStream.cs" />
     <Compile Include="GV\GVHeaderEntry.cs" />
@@ -76,6 +92,8 @@
     <Compile Include="TX\TXEncoding.cs" />
     <Compile Include="TX\TXEntry.cs" />
     <Compile Include="TX\TXReader.cs" />
+    <Compile Include="Utils\SafeGCHandle.cs" />
+    <Compile Include="Utils\UnsafeTypeCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

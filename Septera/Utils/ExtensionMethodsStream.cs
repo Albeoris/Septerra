@@ -37,16 +37,38 @@ namespace Septera
 
             Int32 result = 0;
 
-            for (Int32 i = characterCount; i > 0; i--)
+            for (Int32 i = characterCount - 1; i >= 0; i--)
             {
                 Int32 value = self.ReadByte();
                 if (value < 0x30 || value > 0x39)
                     throw new InvalidDataException($"Unexpected value: 0x{value:X2} has occurred. Expected value in range [0x{0x30:X2}...0x{0x39:X2}].");
 
-                result += (value - 0x30) * (i * 10);
+                Int32 number = (value - 0x30);
+                for (Int32 k = 0; k < i; k++)
+                    number *= 10;
+                
+                result += number;
             }
 
             return result;
+        }
+
+        public static T ReadStruct<T>(this Stream input) where T : struct
+        {
+            return ReadStructs<T>(input, count: 1)[0];
+        }
+
+        public static T[] ReadStructs<T>(this Stream input, Int32 count) where T : struct
+        {
+            if (count < 1)
+                return new T[0];
+
+            Array result = new T[count];
+            Int32 entrySize = UnsafeTypeCache<T>.UnsafeSize;
+            using (UnsafeTypeCache<Byte>.ChangeArrayType(result, entrySize))
+                input.EnsureRead((Byte[])result, 0, result.Length);
+
+            return (T[])result;
         }
     }
 }
