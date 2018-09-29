@@ -210,7 +210,7 @@ namespace Septera
 
             String GetOutputPath(String tag)
             {
-                return Path.Combine(directoryPath, $"{entry.Id:D4}.{tag.ToLowerInvariant()}");
+                return Path.Combine(directoryPath, $"{entry.ResourceId:X8}.{tag.ToLowerInvariant()}");
             }
 
             String outputPath;
@@ -260,7 +260,7 @@ namespace Septera
                         throw new NotSupportedException($"Invalid magic number: {Encoding.ASCII.GetString(buff, 0, 8)}");
 
                     directoryPath = _outputDirectory;
-                    outputPath = Path.Combine(directoryPath, $"{entry.Id:D4}_{package.Name}.qt");
+                    outputPath = Path.Combine(directoryPath, $"{entry.ResourceId:X8}_{package.Name}.qt");
                     target = CopyTarget.Instance;
                     break;
                 }

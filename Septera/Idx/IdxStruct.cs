@@ -4,7 +4,7 @@ namespace Septera
 {
     public struct IdxStruct
     {
-        public Int32 Dummy;
+        public UInt32 ResourceId;
         public Int32 Package;
         public Int32 Offset;
         public Int32 UncompressedSize;

@@ -20,7 +20,7 @@ namespace Septera
             Asserts.Expected(_stream.ParseAsciiNumber(characterCount: 2), expectedVersion);
         }
 
-        public void Read()
+        public CHSegment1[] Read()
         {
             CHHeader header = _stream.ReadStruct<CHHeader>();
 
@@ -37,6 +37,8 @@ namespace Septera
             CHSegment11[] segment11 = ReadSegment<CHSegment11>(header.Offset11);
             CHSegment12[] segment12 = ReadSegment<CHSegment12>(header.Offset12);
             Byte[] segment13 = ReadSegment<Byte>(header.Offset13);
+
+            return segment1;
         }
 
         private T[] ReadSegment<T>(CHSegmentHeader segmentHeader) where T : struct

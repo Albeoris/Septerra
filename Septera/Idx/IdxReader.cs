@@ -28,7 +28,7 @@ namespace Septera
                     IdxStruct* idxPtr = (IdxStruct*)idxDataPtr;
 
                     Dictionary<DbPackage, IdxEntry[]> dic = ReadDictionary(entriesCount, idxPtr);
-
+                    
                     return new IdxContent(_mftContent.Packages, dic);
                 }
             }
@@ -88,7 +88,7 @@ namespace Septera
                     throw new NotSupportedException($"Not supported compression type: {compressionType}");
             }
 
-            return new IdxEntry(id, idx.Offset, idx.CompressedSize, idx.UncompressedSize, idx.ModifiedTime);
+            return new IdxEntry(id, idx.ResourceId, idx.Offset, idx.CompressedSize, idx.UncompressedSize, idx.ModifiedTime);
         }
     }
 }
