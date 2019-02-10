@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27705.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Septerra.Native", "Septerra.Native\Septerra.Native.vcxproj", "{7F86FF0F-8D61-439B-BAE4-79456EA34053}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Septerra", "Septerra\Septerra.csproj", "{82CFC7CA-998C-4653-A4E5-9756C5BA85F9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DFB119CA-5408-46F3-9323-0BADDDDCA0A7} = {DFB119CA-5408-46F3-9323-0BADDDDCA0A7}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Septerra.Injection", "Septerra.Injection\Septerra.Injection.vcxproj", "{DFB119CA-5408-46F3-9323-0BADDDDCA0A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Septerra.Core", "Septerra.Core\Septerra.Core.csproj", "{B18B8E4F-F0A2-4825-B83F-7D0EEC2912D2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Debug|x86.ActiveCfg = Debug|Win32
+		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Debug|x86.Build.0 = Debug|Win32
+		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Release|Any CPU.ActiveCfg = Release|Win32
+		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Release|x86.ActiveCfg = Release|Win32
+		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Release|x86.Build.0 = Release|Win32
+		{82CFC7CA-998C-4653-A4E5-9756C5BA85F9}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{82CFC7CA-998C-4653-A4E5-9756C5BA85F9}.Debug|x86.ActiveCfg = Debug|x86
+		{82CFC7CA-998C-4653-A4E5-9756C5BA85F9}.Debug|x86.Build.0 = Debug|x86
+		{82CFC7CA-998C-4653-A4E5-9756C5BA85F9}.Release|Any CPU.ActiveCfg = Release|x86
+		{82CFC7CA-998C-4653-A4E5-9756C5BA85F9}.Release|x86.ActiveCfg = Release|x86
+		{82CFC7CA-998C-4653-A4E5-9756C5BA85F9}.Release|x86.Build.0 = Release|x86
+		{DFB119CA-5408-46F3-9323-0BADDDDCA0A7}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{DFB119CA-5408-46F3-9323-0BADDDDCA0A7}.Debug|x86.ActiveCfg = Debug|Win32
+		{DFB119CA-5408-46F3-9323-0BADDDDCA0A7}.Debug|x86.Build.0 = Debug|Win32
+		{DFB119CA-5408-46F3-9323-0BADDDDCA0A7}.Release|Any CPU.ActiveCfg = Release|Win32
+		{DFB119CA-5408-46F3-9323-0BADDDDCA0A7}.Release|x86.ActiveCfg = Release|Win32
+		{DFB119CA-5408-46F3-9323-0BADDDDCA0A7}.Release|x86.Build.0 = Release|Win32
+		{B18B8E4F-F0A2-4825-B83F-7D0EEC2912D2}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{B18B8E4F-F0A2-4825-B83F-7D0EEC2912D2}.Debug|x86.ActiveCfg = Debug|x86
+		{B18B8E4F-F0A2-4825-B83F-7D0EEC2912D2}.Debug|x86.Build.0 = Debug|x86
+		{B18B8E4F-F0A2-4825-B83F-7D0EEC2912D2}.Release|Any CPU.ActiveCfg = Release|x86
+		{B18B8E4F-F0A2-4825-B83F-7D0EEC2912D2}.Release|x86.ActiveCfg = Release|x86
+		{B18B8E4F-F0A2-4825-B83F-7D0EEC2912D2}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A7CC9EB5-0EE5-4D80-8A8E-FEB3AB3D3E84}
+	EndGlobalSection
+EndGlobal

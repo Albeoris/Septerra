@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B18B8E4F-F0A2-4825-B83F-7D0EEC2912D2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Septerra.Core</RootNamespace>
+    <AssemblyName>Septerra.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Output\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\Output\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BitMiracle.LibTiff.NET, Version=2.4.560.0, Culture=neutral, PublicKeyToken=53879b3e20e7a7d6, processorArchitecture=MSIL">
+      <HintPath>..\packages\BitMiracle.LibTiff.NET.2.4.560\lib\net20\BitMiracle.LibTiff.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Formats\AM\AMHeader.cs" />
+    <Compile Include="Formats\AM\AMAnimation.cs" />
+    <Compile Include="Formats\AM\AMAnimationShift.cs" />
+    <Compile Include="Formats\AM\AMFrame.cs" />
+    <Compile Include="Formats\AM\AMPalette.cs" />
+    <Compile Include="Formats\AM\AMImageHeader.cs" />
+    <Compile Include="Formats\AM\AMImageSegment.cs" />
+    <Compile Include="Formats\AM\AMImageLine.cs" />
+    <Compile Include="Formats\AM\AMSegmentReference.cs" />
+    <Compile Include="Formats\AM\ABGRColor.cs" />
+    <Compile Include="Formats\AM\BGRColor.cs" />
+    <Compile Include="Formats\AM\TiffColorMap.cs" />
+    <Compile Include="Formats\CH\CHHeader.cs" />
+    <Compile Include="Formats\CH\CHReader.cs" />
+    <Compile Include="Formats\CH\CHSegment1.cs" />
+    <Compile Include="Formats\CH\CHSegment10.cs" />
+    <Compile Include="Formats\CH\CHSegment11.cs" />
+    <Compile Include="Formats\CH\CHSegment12.cs" />
+    <Compile Include="Formats\CH\CHSegment2.cs" />
+    <Compile Include="Formats\CH\CHSegment3.cs" />
+    <Compile Include="Formats\CH\CHSegment5.cs" />
+    <Compile Include="Formats\CH\CHSegment6.cs" />
+    <Compile Include="Formats\CH\CHSegment7.cs" />
+    <Compile Include="Formats\CH\CHSegment8.cs" />
+    <Compile Include="Formats\CH\CHSegmentHeader.cs" />
+    <Compile Include="Formats\CH\CHSegmentSkillName.cs" />
+    <Compile Include="Formats\CH\CHTextureNames.cs" />
+    <Compile Include="Formats\NativeFormatProvider.cs" />
+    <Compile Include="Formats\Sources\ImageSource.cs" />
+    <Compile Include="Formats\Targets\ImageMeta.cs" />
+    <Compile Include="Formats\Targets\ImageTarget.cs" />
+    <Compile Include="Formats\Targets\MultiTarget.cs" />
+    <Compile Include="ServiceProviders\TX\TxFsService.cs" />
+    <Compile Include="ServiceProviders\TX\TxCachedData.cs" />
+    <Compile Include="Utils\ExtensionMethodsCollection.cs" />
+    <Compile Include="Utils\FileContentProvider.cs" />
+    <Compile Include="ServiceProviders\FileSystemWatchService.cs" />
+    <Compile Include="ServiceProviders\InteractionService.cs" />
+    <Compile Include="ServiceProviders\IService.cs" />
+    <Compile Include="ServiceProviders\Services.cs" />
+    <Compile Include="Hooks\TxRecord.cs" />
+    <Compile Include="Utils\BilateralDictionary.cs" />
+    <Compile Include="ServiceProviders\DB\DbCachedData.cs" />
+    <Compile Include="ServiceProviders\DB\DbCachedDataId.cs" />
+    <Compile Include="Formats\DB\DbExtractor.cs" />
+    <Compile Include="ServiceProviders\DB\DbFsIndices.cs" />
+    <Compile Include="ServiceProviders\DB\DbFsIndicesMode.cs" />
+    <Compile Include="Formats\DB\DbNames.cs" />
+    <Compile Include="Formats\DB\DbPackage.cs" />
+    <Compile Include="Formats\DB\DbRecordId.cs" />
+    <Compile Include="ServiceProviders\DB\DbFsService.cs" />
+    <Compile Include="Formats\Sources\TextSource.cs" />
+    <Compile Include="Formats\TX\TXHeader.cs" />
+    <Compile Include="Utils\FileSystemCommittedWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Utils\ExtensionMethodsDictionary.cs" />
+    <Compile Include="Utils\IFileSystemWatcherFilter.cs" />
+    <Compile Include="Utils\Log.cs" />
+    <Compile Include="Formats\GV\GVHeaderEntry.cs" />
+    <Compile Include="Formats\GV\GVReader.cs" />
+    <Compile Include="Hooks\Common.cs" />
+    <Compile Include="Hooks\DbRecord.cs" />
+    <Compile Include="Formats\Idx\IdxContent.cs" />
+    <Compile Include="Formats\Idx\IdxEntry.cs" />
+    <Compile Include="Formats\Idx\IdxReader.cs" />
+    <Compile Include="Formats\Idx\IdxStruct.cs" />
+    <Compile Include="Formats\IL\ILHeaderEntry.cs" />
+    <Compile Include="Formats\IL\ILReader.cs" />
+    <Compile Include="Formats\IL\ILValueEntry.cs" />
+    <Compile Include="Formats\Mft\MftContent.cs" />
+    <Compile Include="Formats\Mft\MftReader.cs" />
+    <Compile Include="Formats\Mft\TerrabuilderVersion.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Formats\Targets\CopyTarget.cs" />
+    <Compile Include="Formats\Targets\GVTarget.cs" />
+    <Compile Include="Formats\Targets\ILTarget.cs" />
+    <Compile Include="Formats\Targets\ITarget.cs" />
+    <Compile Include="Formats\Targets\TextTarget.cs" />
+    <Compile Include="Formats\TX\TXEncoding.cs" />
+    <Compile Include="Formats\TX\TXEntry.cs" />
+    <Compile Include="Formats\TX\TXReader.cs" />
+    <Compile Include="Utils\Asserts.cs" />
+    <Compile Include="Utils\DisposableAction.cs" />
+    <Compile Include="Utils\ExtensionMethodsRegex.cs" />
+    <Compile Include="Utils\ExtensionMethodsStream.cs" />
+    <Compile Include="Utils\SafeGCHandle.cs" />
+    <Compile Include="Utils\TypeCahce.cs" />
+    <Compile Include="Utils\UnsafeList.cs" />
+    <Compile Include="Utils\UnsafeTypeCache.cs" />
+    <Compile Include="Win32\AllocationType.cs" />
+    <Compile Include="Win32\FreeType.cs" />
+    <Compile Include="Win32\Kernel32.cs" />
+    <Compile Include="Win32\MemoryProtection.cs" />
+    <Compile Include="Win32\ProcessAccessFlags.cs" />
+    <Compile Include="Win32\SafeProcessHandle.cs" />
+    <Compile Include="Win32\SafeRemoteThread.cs" />
+    <Compile Include="Win32\SafeVirtualMemoryHandle.cs" />
+    <Compile Include="Win32\SECURITY_ATTRIBUTES.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Septerra.Native\Septerra.Native.vcxproj">
+      <Project>{7f86ff0f-8d61-439b-bae4-79456ea34053}</Project>
+      <Name>Septerra.Native</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

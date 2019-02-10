@@ -1,0 +1,164 @@
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+    struct AMHeader
+    {
+        /* 00000000 */ int32 MagicNumber <fgcolor=cGray>;
+        /* 00000004 */ int32 AnimationType <fgcolor=cYellow>;
+        /* 00000008 */ int32 AnimationOffset <fgcolor=cLtBlue>;
+        /* 0000000C */ int32 AnimationCount <fgcolor=cGreen>; // * 76
+        /* 00000010 */ int32 FrameOffset <fgcolor=cLtBlue>;
+        /* 00000014 */ int32 FrameCount <fgcolor=cGreen>; // * 26
+        /* 00000018 */ int32 PaletteOffset <fgcolor=cLtBlue>;
+        /* 0000001C */ int32 PaletteCount <fgcolor=cGreen>;
+        /* 00000020 */ int32 ImageHeaderOffset <fgcolor=cLtBlue>;
+        /* 00000024 */ int32 ImageHeaderCount <fgcolor=cGreen>;
+        /* 00000028 */ int32 ImageContentOffset <fgcolor=cLtBlue>;
+        /* 0000002C */ int32 ImageContentSize <fgcolor=cGreen>;
+        /* 00000030 */ int32 ImageSegmentOffset <fgcolor=cLtBlue>;
+        /* 00000034 */ int32 ImageSegmentCount <fgcolor=cGreen>;
+        /* 00000038 */ int32 ImageLineOffset <fgcolor=cLtBlue>;
+        /* 0000003C */ int32 ImageLineCount <fgcolor=cGreen>;
+        /* 00000040 */ int32 Zero1 <fgcolor=cGray>;
+        /* 00000044 */ int32 Zero2 <fgcolor=cGray>;
+    };
+
+    struct AMFrameReference
+    {
+        /* 00000000 */ uint16 FrameIndex <fgcolor=cLtBlue>;
+        /* 00000002 */ uint16 FrameCount <fgcolor=cLtGreen>;
+    };
+
+    union ARGColor
+    {
+        BigEndian();
+        int color;
+        SetForeColor(color);
+        int dummy;
+        LittleEndian();
+    };
+
+    struct AMAnimationShift
+    {
+        int OX <fgcolor=cLtRed>;;
+        int OY <fgcolor=cLtRed>;;
+    };
+
+    struct AMAnimation
+    {
+        /* 00000000 */ uint32 ShiftCount <fgcolor=cLtGreen>;
+        /* 00000004 */ AMAnimationShift Shifts[5] <fgcolor=cRed>;
+        /* 0000002C */ AMFrameReference Frames[8] <bgcolor=0x125B12>;
+    };
+
+    struct Frame
+    {
+        /* 00000000 */ uint16 ImageIndex <fgcolor=cLtBlue>;
+        /* 00000002 */ uint16 PaletteIndex <fgcolor=cLtBlue>;
+        /* 00000004 */ uint16 FrameTime <fgcolor=cLtYellow>;
+        /* 00000006 */ uint16 MinusOX <fgcolor=cLtYellow>;
+        /* 00000008 */ uint16 MinusOY <fgcolor=cLtYellow>;
+        /* 0000000A */ uint16 FlipImageFlags <fgcolor=cLtYellow>;
+        /* 0000000C */ uint16 Flags <fgcolor=cLtRed>;  /* [0..3]*/
+        /* 0000000E */ uint16 OffsetOX <fgcolor=cLtYellow>;
+        /* 00000010 */ uint16 OffsetOY <fgcolor=cLtYellow>;
+        /* 00000012 */ uint16 AnimationMirrorIndexFrom0To4 <fgcolor=cGray>; /* [0..4]*/
+        /* 00000014 */ uint16 MaskImageIndex <fgcolor=cLtBlue>;
+        /* 00000016 */ int16 PlusOX <fgcolor=cLtYellow>;
+        /* 00000018 */ int16 PlusOY <fgcolor=cLtYellow>;
+    };
+
+    struct Palette
+    {
+        /* 00000000 */ ARGColor Data[256] <optimize=false>;
+    };
+
+    struct ImageHeader
+    {
+        /* 00000000 */ uint16 Width <fgcolor=cLtRed>;
+        /* 00000002 */ uint16 Height <fgcolor=cLtRed>;
+        /* 00000004 */ uint32 Zero01 <fgcolor=cGray>;
+        /* 00000008 */ uint32 Zero02 <fgcolor=cGray>;
+        /* 0000000C */ uint32 Zero03 <fgcolor=cGray>;
+        /* 00000010 */ uint32 ImageLineIndex <fgcolor=cLtBlue>;
+        /* 00000014 */ uint32 Height32 <fgcolor=cGray>; /* same as Height */
+    };
+
+    struct ImageSegment
+    {
+        /* 00000000*/ uint16 PageOffset <fgcolor=cLtBlue>;
+        /* 00000002*/ uint16 PageNumber <fgcolor=cLtBlue>;
+        /* 00000004*/ uint16 LeftPadding <fgcolor=cLtGreen>;
+        /* 00000006*/ uint16 SizeInBytes <fgcolor=cLtGreen>;
+    };
+
+    struct ImageLine
+    {
+        /* 00000000 */ uint32 ImageSegmentIndex <fgcolor=cLtBlue>;
+        /* 00000004 */ uint32 ImageSegmentCount <fgcolor=cLtGreen>;
+    };
+
+AMHeader header;
+
+local int bgColor = GetBackColor();
+
+if (header.AnimationCount > 0)
+{
+    SetBackColor(0xAE484B);
+    FSeek(header.AnimationOffset);
+    AMAnimation Animations[header.AnimationCount];
+}
+
+if (header.FrameCount > 0)
+{
+    SetBackColor(0x125B12);
+    FSeek(header.FrameOffset);
+    Frame Frames[header.FrameCount];
+}
+
+if (header.PaletteOffset > 0)
+{
+    SetBackColor(cNone);
+    FSeek(header.PaletteOffset);
+    Palette Palettes[header.PaletteCount];
+}
+
+if (header.ImageHeaderOffset > 0)
+{
+    SetBackColor(0x00008B);
+    FSeek(header.ImageHeaderOffset);
+    ImageHeader Images[header.ImageHeaderCount];
+}
+
+if (header.ImageContentOffset > 0)
+{
+    SetBackColor(0x000000);
+    FSeek(header.ImageContentOffset);
+    byte ImageData[header.ImageContentSize];
+}
+
+if (header.ImageSegmentOffset > 0)
+{
+    SetBackColor(0x00255F);
+    FSeek(header.ImageSegmentOffset);
+    ImageSegment ImageSegments[header.ImageSegmentCount];
+}
+
+if (header.ImageLineOffset > 0)
+{
+    SetBackColor(0x1B676D);
+    FSeek(header.ImageLineOffset);
+    ImageLine Lines[header.ImageLineCount];    
+}
+
+SetBackColor(bgColor);
