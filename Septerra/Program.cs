@@ -263,7 +263,7 @@ namespace Septerra
         {
             Console.WriteLine("convert type sourceFolder [sourceMask]");
             Console.WriteLine("convert type sourceFile [targetFile]");
-            Console.WriteLine("  Types: tx2txt, am2tiff, tiff2am");
+            Console.WriteLine("  Types: tx2txt, am2tiff, tiff2am, vssf2mp3, mp32vssf");
             Console.WriteLine();
             Console.WriteLine("  Example: convert am2tiff .\\Data\\anim *.am");
             Console.WriteLine("  will convert all *.am files to TIFFs in the \\Data\\anim folder.");
@@ -272,7 +272,7 @@ namespace Septerra
             Console.WriteLine("  will convert 08219990.tiff to 08219990.am");
             Console.WriteLine();
             Console.WriteLine("  Example: convert tx2txt 0500000B.tx \"Azziz's Temple.txt\"");
-            Console.WriteLine("  will convert credits.tiff to Azziz's Temple.txt");
+            Console.WriteLine("  will convert 0500000B.tx to Azziz's Temple.txt");
             Console.WriteLine();
         }
     }
