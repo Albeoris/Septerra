@@ -24,16 +24,22 @@ namespace Septerra.Core.DB
                     return ReadTextFile(resourcePath, input);
                 case ".tiff":
                     return ReadImageFile(resourcePath, input);
+                case ".mp3":
+                    return ReadMp3File(resourcePath, input);
                 default:
                     return input.ReadToEnd();
             }
+        }
+
+        private static Byte[] ReadMp3File(String resourcePath, FileStream input)
+        {
+            return SoundSource.Instance.Read(input);
         }
 
         private static Byte[] ReadImageFile(String resourcePath, FileStream input)
         {
             UnsafeList<Byte> uns = _tiffReader.Read(resourcePath, input);
             return uns.CopyToArray();
-
         }
 
         private static Byte[] ReadTextFile(String resourcePath, FileStream input)

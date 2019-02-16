@@ -1,1 +1,0 @@
-.\Launcher\Septerra.exe convert am2tiff .\Data\anim *.am

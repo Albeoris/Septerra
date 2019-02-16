@@ -215,6 +215,12 @@ namespace Septerra
                     case "tiff2am":
                         coroutine = new ConvertTiffToAmCoroutine(spec);
                         break;
+                    case "vssf2mp3":
+                        coroutine = new ConvertVssfToMp3Coroutine(spec);
+                        break;
+                    case "mp32vssf":
+                        coroutine = new ConvertMp3ToVssfCoroutine(spec);
+                        break;
                     default:
                         throw new ArgumentException(mode, nameof(args));
                 }
@@ -230,6 +236,9 @@ namespace Septerra
                 Console.Error.WriteLine(ex);
                 Console.Error.WriteLine("----------------------------");
                 ShowConvertHelp();
+                Console.WriteLine();
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
                 return 255;
             }
         }

@@ -50,10 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coroutines\Convert\ConvertAmToTiffCoroutine.cs" />
+    <Compile Include="Coroutines\Convert\ConvertMp3ToVssfCoroutine.cs" />
+    <Compile Include="Coroutines\Convert\ConvertPipelineCoroutine.cs" />
     <Compile Include="Coroutines\Convert\ConvertTiffToAmCoroutine.cs" />
     <Compile Include="Coroutines\Convert\ConvertTxToTxtCoroutine.cs" />
     <Compile Include="Coroutines\Convert\ConvertSpec.cs" />
     <Compile Include="Coroutines\Convert\ConvertSpecPreprocessor.cs" />
+    <Compile Include="Coroutines\Convert\ConvertVssfToMp3Coroutine.cs" />
     <Compile Include="Coroutines\RunGame\RunGameCoroutine.cs" />
     <Compile Include="Coroutines\RunGame\RunGameSpec.cs" />
     <Compile Include="Coroutines\RunGame\RunGameSpecPreprocessor.cs" />

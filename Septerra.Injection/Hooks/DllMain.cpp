@@ -1,11 +1,13 @@
 #include "../libs/detours.h"
 #include "../CLR/AssemblyResolver.hpp"
+#include "../Debugger/Debugger.h"
 #include "Septerra_Common_ShowError.hpp"
 #include "Septerra_DbRecord_Close.hpp"
 #include "Septerra_DbRecord_GetDecompressedSize.hpp"
 #include "Septerra_DbRecord_Open.hpp"
 #include "Septerra_DbRecord_Read.hpp"
 #include "Septerra_DbRecord_Seek.hpp"
+#include "Septerra_QtRecord_FindFile.hpp"
 #include "Septerra_TxRecord_Acquire.hpp"
 #include "Septerra_TxRecord_Find.hpp"
 #include "Septerra_TxRecord_ReleaseByPointer.hpp"
@@ -30,6 +32,7 @@ namespace SepterraInjection
 		Hook(Septerra_DbRecord_Open);
 		Hook(Septerra_DbRecord_Read);
 		Hook(Septerra_DbRecord_Seek);
+		Hook(Septerra_QtRecord_FindFile);
 		Hook(Septerra_TxRecord_Acquire);
 		Hook(Septerra_TxRecord_Find);
 		Hook(Septerra_TxRecord_ReleaseByPointer);
@@ -67,7 +70,7 @@ namespace SepterraInjection
 	extern "C" __declspec(dllexport)
 	BOOL WINAPI DllMain(HMODULE dllInstance, DWORD callReason, LPVOID reserved)
 	{
-		//LaunchDebugger(); // Uncomment to debug
+		// LaunchDebugger(); // Uncomment to debug, unmanaged mode only!
 
 		switch (callReason)
 		{

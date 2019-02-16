@@ -1,1 +1,0 @@
-.\Launcher\Septerra.exe convert tx2txt .\Data\text *.tx

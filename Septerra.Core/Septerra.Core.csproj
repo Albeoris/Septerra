@@ -95,9 +95,12 @@
     <Compile Include="Formats\CH\CHTextureNames.cs" />
     <Compile Include="Formats\NativeFormatProvider.cs" />
     <Compile Include="Formats\Sources\ImageSource.cs" />
+    <Compile Include="Formats\Sources\SoundSource.cs" />
     <Compile Include="Formats\Targets\ImageMeta.cs" />
     <Compile Include="Formats\Targets\ImageTarget.cs" />
     <Compile Include="Formats\Targets\MultiTarget.cs" />
+    <Compile Include="Formats\Targets\SoundTarget.cs" />
+    <Compile Include="Hooks\QtRecord.cs" />
     <Compile Include="ServiceProviders\TX\TxFsService.cs" />
     <Compile Include="ServiceProviders\TX\TxCachedData.cs" />
     <Compile Include="Utils\ExtensionMethodsCollection.cs" />

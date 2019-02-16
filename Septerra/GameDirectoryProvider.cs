@@ -23,7 +23,7 @@ namespace Septerra
         public static Boolean ByCurrentFolder(out GameDirectoryDescriptor descriptor)
         {
             GameDirectoryDescriptor result = new GameDirectoryDescriptor(Environment.CurrentDirectory);
-            if (result.IsExecutableExists || result.IsMftExists)
+            if (result.IsMftExists)
             {
                 descriptor = result;
                 return true;

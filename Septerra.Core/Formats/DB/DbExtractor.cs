@@ -279,7 +279,16 @@ namespace Septerra.Core
                    break;
                case "VS":
                    outputPath = GetOutputPath("vssf");
-                   target = CopyTarget.Instance;
+                   if (Convert)
+                   {
+                       outputPath = GetOutputPath("mp3");
+                       target = SoundTarget.Instance;
+                   }
+                   else
+                   {
+                       outputPath = GetOutputPath(magicTag);
+                       target = CopyTarget.Instance;
+                   }
                    break;
                 default:
                 {

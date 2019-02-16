@@ -131,6 +131,7 @@
     <ClInclude Include="Hooks\Septerra_DbRecord_Close.hpp" />
     <ClInclude Include="Hooks\Septerra_DbRecord_Read.hpp" />
     <ClInclude Include="Hooks\Septerra_Common_ShowError.hpp" />
+    <ClInclude Include="Hooks\Septerra_QtRecord_FindFile.hpp" />
     <ClInclude Include="libs\detours.h" />
     <ClInclude Include="System\Resource.h" />
     <ClInclude Include="System\stdafx.h" />
