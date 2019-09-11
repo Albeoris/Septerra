@@ -1,0 +1,35 @@
+struct ILHeader /* item list */
+{
+  INT32 MagicNumber;
+  INT32 Containers;
+  INT32 ContainersCount;
+  INT32 Items;
+  INT32 ItemsCount;
+};
+
+struct ILContainer
+{
+  INT32 StartIndex;
+  INT32 ItemsCount;
+};
+
+struct ILItem
+{
+  INT32 ItemIndex;
+  INT32 ItemCount;
+  INT32 LVE2_F3;
+  INT32 LVE2_F4;
+};
+
+struct ILFile
+{
+  ILHeader Header;
+
+  FSeek(Header.Containers);
+  ILContainer S1[Header.ContainersCount];
+
+  FSeek(Header.Items);
+  ILItem S2[Header.ItemsCount];
+};
+
+ILFile file;

@@ -1,0 +1,56 @@
+struct GVHeader
+{
+  INT32 MagicNumber;
+  INT32 Offset1;
+  INT32 Count1;
+  INT32 Offset2;
+  INT32 Count2;
+};
+
+struct GVEntry
+{
+  INT32 NameOffset;
+  INT32 b;
+  INT32 Value;
+  INT32 Type;
+
+  local long pos = FTell();
+  
+  FSeek(header.Offset2 + NameOffset);
+  string Name;
+
+  FSeek(pos);
+};
+
+GVHeader header; 
+
+FSeek(header.Offset1);
+GVEntry entry[header.Count1] <optimize=false, name=GVEntry_Name>;
+
+//FSeek(header.Offset2);
+//char Content[header.Count2];
+
+string GVEntry_Name(GVEntry &v)
+{
+  string result; 
+
+  local string type = GVEntry_GetType(v.Type);
+  SPrintf( result, "%s %s = %d (%d)", type, v.Name, v.Value, v.b );
+  return result;
+}
+
+string GVEntry_GetType(INT32 type)
+{
+  if (type == 0x01)
+    return "BOOL";
+  else if (type == 0xFF)
+    return "INT8";
+  else if (type == 0xFFFF)
+    return "INT16";
+  else if (type == -1)
+    return "INT32";
+  else if (type == 0)
+    return "EMPTY";
+  else
+    return "UNKNOWN";
+}

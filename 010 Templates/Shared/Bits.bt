@@ -1,0 +1,25 @@
+#ifndef BITS_H
+#define BITS_H
+
+union Int32Mask
+{
+  struct Bytes
+  {
+    byte lb1;
+    byte b2;
+    byte b3;
+    byte hb4;
+  };
+  
+  int32 value;
+  Bytes mask;
+};
+
+string Int32Mask_Name(Int32Mask &v)
+{
+    string result;
+    SPrintf( result, "%08X", v.value );
+    return result;
+}
+
+#endif

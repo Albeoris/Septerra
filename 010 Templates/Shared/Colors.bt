@@ -1,0 +1,18 @@
+#ifndef COLORS_H
+#define COLORS_H
+
+    union ARGColor
+    {
+        BigEndian();
+        int color;
+        SetForeColor(color);
+        int dummy;
+        LittleEndian();
+    };
+
+    struct Palette
+    {
+        /* 00000000 */ ARGColor Data[256] <optimize=false>;
+    };
+
+#endif

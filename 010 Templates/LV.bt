@@ -1,0 +1,259 @@
+#include "Shared\Colors.bt"
+#include "Shared\Resources.bt"
+#include "Shared\Bits.bt"
+#include "Shared\Common.bt"
+
+struct AMSurfaceFill
+{
+  BYTE field_0;
+  BYTE field_1;
+  INT16 PaletteIndex;
+  INT16 FrameIndex;
+  INT16 minusOX;
+  INT16 minusOY;
+  INT16 positiveOX;
+  INT16 positiveOY;
+  INT16 FrameWidth;
+  INT16 FrameHeight;
+  INT16 FlipImage;
+};
+
+struct AMSurfaceReference
+{
+  INT16 FillIndex;
+  INT16 FillCount;
+  INT16 U1;
+  INT16 U2;
+};
+
+struct LVEntry11
+{
+  BYTE DescType1or2;
+  BYTE field_1;
+  BYTE DescType4;
+  BYTE field_3;
+  BYTE DescType3;
+  BYTE gap_5[15];
+  BYTE gap14[4];
+  INT32 PointIndex;
+  INT32 PointNumber;
+  INT16 RectLeft;
+  INT16 RectTop;
+  INT16 RectRight;
+  INT16 RectBottom;
+  INT32 TextResource <format=hex>;
+  BYTE gap2C[10];
+  BYTE gap36[4];
+  INT16 field_3A;
+  INT32 field_4444;
+};
+
+struct LVEntry15
+{
+  POINT Point;
+  INT32 LVE15_3;
+  INT32 LV16Index;
+  INT32 LV16Count;
+};
+
+struct LVEntry16
+{
+  INT32 NodeIndex;
+  INT32 NodeWeight;
+  INT32 LVE16_3;
+};
+
+struct LVEntry18
+{
+  INT32 SceneInfoPtr <fgcolor=cBlack>;
+  INT32 Type;
+  INT32 Value <fgcolor=cLtGreen>;
+  INT32 Index <fgcolor=cDkRed>;
+  INT32 Count <fgcolor=cLtRed>;
+};
+
+string LVEntry18_Name(LVEntry18 &v)
+{
+  string result;
+  if (v.Type == 0 )
+  {
+    local int slot;
+    local int character;
+    if (v.Value >= 0)
+    {
+      slot = v.Value / 10;
+      character = v.Value % 10;
+    }
+    else
+    {
+      slot = -1 - v.Value;
+      character = 0;
+    }
+    SPrintf( result, "PC%d = %d (Index: %d+%d)", slot, character, v.Index, v.Count);  
+  }
+  else if (v.Type == 1)
+    SPrintf( result, "Sprite Actor LV7[%d]: (Index: %d+%d)", v.Value, v.Index, v.Count );
+  else if (v.Type == 2)
+    SPrintf( result, "Character Actor LV7[%d]: (Index: %d+%d)", v.Value, v.Index, v.Count );
+  else if (v.Type == 3)
+    SPrintf( result, "Actor LV7[%d]: (Index: %d+%d)", v.Value, v.Index, v.Count );
+  else
+    SPrintf( result, "%d: %d (Index: %d+%d)", v.Type, v.Value, v.Index, v.Count );
+  return result;
+}
+
+struct LVEntry19
+{
+  INT32 F1;
+  INT32 F2;
+  INT32 F3;
+  INT32 F4;
+  INT32 F5;
+  INT32 F6;
+  INT32 F7;
+  INT32 F8;
+  INT32 F9;
+  INT32 F10;
+  INT32 F11;
+  INT32 F12;
+  INT32 F13;
+};
+
+struct LVEntry21
+{
+  INT32 field_d00;
+  INT32 field_d04;
+  INT32 field_d08;
+  INT32 field_d12;
+  INT32 field_d16;
+  BYTE gap_d20[16];
+  INT32 field_d36;
+  INT32 field_d40;
+  INT32 field_d44;
+  BYTE gap_d48[14];
+  INT32 field_d58;
+  INT32 field_d62;
+  BYTE Data[138];
+  INT32 field_d208;
+};
+
+struct LVHeader
+{
+  int32 LevelId;
+  int16 Width;
+  int16 Height;
+  char field_8;
+  byte gap_9[3];
+  INT32 field_C;
+  INT32 PaletteOffset;
+  INT32 PaletteCount;
+  INT32 Offset2;
+  INT32 Count2;
+  INT32 Offset3;
+  INT32 Count3;
+  INT32 Offset4;
+  INT32 Count4;
+  INT32 Offset5;
+  INT32 Count5;
+  INT32 Offset6;
+  INT32 Count6;
+  INT32 Offset7;
+  INT32 Count7;
+  INT32 ResourcesOffset;
+  INT32 ResourcesCount;
+  INT32 Offset9;
+  INT32 Count9;
+  INT32 FillReferences;
+  INT32 ScreenNumberOX;
+  INT32 ScreenNumberOY;
+  INT32 Offset11;
+  INT32 Count11;
+  INT32 Offset12;
+  INT32 Count12;
+  INT32 Offset13;
+  INT32 Count13;
+  INT32 VSSS;
+  INT32 vsssSize;
+  INT32 Offset15;
+  INT32 Count15;
+  INT32 Offset16;
+  INT32 Count16;
+  INT32 EventNameOffset;
+  INT32 EventNameCount;
+  INT32 Offset18;
+  INT32 Count18;
+  INT32 Offset19;
+  INT32 Count19;
+  INT32 Offset20;
+  INT32 Count20;
+  INT32 Offset21;
+  INT32 Count21;
+  INT32 Offset22;
+  INT32 Count22;
+  INT32 Offset23;
+};
+
+struct LVFile
+{
+  LVHeader header;
+
+  FSeek(header.PaletteOffset);
+  Palette Palettes[header.PaletteCount] <optimize=false>;
+
+  FSeek(header.Offset2);
+  ImageHeader Images[header.Count2];
+
+  FSeek(header.Offset3);
+  AMSurfaceFill SurfaceFill[header.Count3];
+
+  FSeek(header.Offset4);
+  POINT Points[header.Count4];
+
+  FSeek(header.Offset7);
+  LVEntry7 LV7[header.Count7];
+
+  FSeek(header.ResourcesOffset);
+  ResourceTypeName Resources[header.ResourcesCount] <name=ResourceTypeName_Name>;
+
+  FSeek(header.Offset9);
+  LVEntry9 LV9[header.Count9];
+
+  FSeek(header.FillReferences);
+  AMSurfaceReference FillReferences[header.ScreenNumberOX * header.ScreenNumberOY];
+
+  FSeek(header.Offset11);
+  LVEntry11 LV11[header.Count11];
+
+  FSeek(header.Offset12);
+  ImageSegment ImageSegments[header.Count12];
+
+  FSeek(header.Offset13);
+  ImageLine ImageLines[header.Count13];
+
+  FSeek(header.Offset15);
+  LVEntry15 LV15[header.Count15];
+
+  FSeek(header.Offset16);
+  LVEntry16 LV16[header.Count16];
+
+  FSeek(header.EventNameOffset);
+  ResourceName Events[header.EventNameCount] <name=ResourceName_Name>;
+
+  FSeek(header.Offset18);
+  LVEntry18 LV18[header.Count18] <name=LVEntry18_Name>;
+
+  FSeek(header.Offset19);
+  LVEntry19 LV19[header.Count19];
+
+  FSeek(header.Offset20);
+  INT32 LV20Index[header.Count20];
+
+  FSeek(header.Offset21);
+  LVEntry21 LV21[header.Count21];
+
+  FSeek(header.Offset22);
+  LVEntry22 LV22[header.Count22];
+
+};
+
+LVFile file;

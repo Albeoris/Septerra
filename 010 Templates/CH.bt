@@ -1,0 +1,174 @@
+#include "Shared\Resources.bt"
+#include "Shared\Common.bt"
+
+    struct CHSegmentHeader
+    {
+        int32 Offset;
+        int32 Count;
+    };
+
+    struct CHSegment1
+    {
+        INT32 Unknown1[2];
+        INT16 field_8;
+        INT16 field_2;
+        INT32 chType;
+        INT32 AnimationId;
+        INT32 AnimationId2;
+        INT32 field_18;
+        BYTE PaletteIndex2;
+        BYTE PaletteIndex;
+        BYTE gap_1E[8];
+        INT16 SomeScaleDivider;
+        BYTE gap_28[4];
+        INT16 Strength;
+        INT16 Vitality;
+        INT16 Agility;
+        INT16 Psyche;
+        INT16 Perception;
+        INT16 field_2E;
+        BYTE field_30;
+        BYTE field_31;
+        INT16 field_32;
+        INT16 MaxHP;
+        INT16 Strike;
+        INT16 Armor;
+        INT16 Power;
+        INT16 Core;
+        INT16 Speed;
+        INT16 field_48;
+        BYTE gap_4A[2];
+        INT16 field_4C;
+        BYTE gap_4E[14];
+        INT32 field_5C;
+        BYTE gap_60[112];
+        INT16 field_D0;
+        INT16 field_CA;
+        BYTE gap_D4[36];
+        INT32 field_F8;
+        INT32 field_F8_1;
+        INT16 field_F8_2;
+        INT16 field_FA;
+        INT32 field_F8_3;
+        INT32 field_F8_4;
+        INT32 field_F8_5;
+        INT32 field_F8_6;
+        INT32 field_F8_7;
+        INT32 field_F8_8;
+        INT32 field_F8_9;
+    };
+
+    struct CHSegment2
+    {
+        int StringId1;
+        int StringId2;
+        BYTE Unknown03_1;
+        BYTE Unknown03_2;
+        BYTE Unknown03_3;
+        BYTE Unknown03_4;
+        INT32 Unknown04;
+        INT32 Unknown05;
+        INT32 Unknown06;
+        INT32 Unknown07;
+        INT32 Unknown08;
+        INT32 Unknown09;
+        INT32 Unknown10;
+        INT32 CH3Index;
+        INT32 CH3Count;
+    };
+
+    struct CHSegment3
+    {
+        int32 Unknown1;
+        int32 Unknown2;
+    };
+
+    struct CHSegment8
+    {
+        int32 Unknown1;
+        int32 Unknown2;
+        int32 Unknown3;
+        int32 Unknown4;
+        int32 Unknown5;
+    };
+
+    struct CHSegment10
+    {
+        byte Unknown1[52]; // => 0x34
+    };
+
+    struct CHSegment11
+    {
+        int32 Unknown;
+    };
+
+    struct CHSegment12
+    {
+        int32 Unknown[53]; // => 0xD4
+    };
+
+
+struct CHHeader
+{
+    /* 0x00 + 4 */ char magicNumber[4];
+    /* 0x04 + 4 */ int32 TextResourceId <format=hex>;
+    /* 0x08 + 8 */ CHSegmentHeader Offset1;
+    /* 0x10 + 8 */ CHSegmentHeader Offset2;
+    /* 0x18 + 8 */ CHSegmentHeader Offset3;
+    /* 0x20 + 8 */ CHSegmentHeader TextureNames;
+    /* 0x28 + 8 */ CHSegmentHeader Offset5;
+    /* 0x30 + 8 */ CHSegmentHeader Offset6;
+    /* 0x38 + 8 */ CHSegmentHeader Offset7;
+    /* 0x40 + 8 */ CHSegmentHeader Offset8;
+    /* 0x48 + 8 */ CHSegmentHeader SkillNames;
+    /* 0x50 + 8 */ CHSegmentHeader Offset10;
+    /* 0x58 + 8 */ CHSegmentHeader Offset11;
+    /* 0x60 + 8 */ CHSegmentHeader Offset12;
+    /* 0x68 + 8 */ CHSegmentHeader Offset13 <bgcolor=cDkAqua>;
+};
+
+struct CHFile
+{
+    CHHeader Header;
+
+    FSeek(Header.Offset1.Offset);
+    CHSegment1 S1[Header.Offset1.Count];
+
+    FSeek(Header.Offset2.Offset);
+    CHSegment2 S2[Header.Offset2.Count];
+
+    FSeek(Header.Offset3.Offset);
+    CHSegment3 S3[Header.Offset3.Count];
+
+    FSeek(Header.TextureNames.Offset);
+    ResourceTypeName Textures[Header.TextureNames.Count] <name=ResourceTypeName_Name>;
+
+    FSeek(Header.Offset5.Offset);
+    LVEntry22 S5[Header.Offset5.Count];
+
+    FSeek(Header.Offset6.Offset);
+    LVEntry9 S6[Header.Offset6.Count];
+
+    FSeek(Header.Offset7.Offset);
+    LVEntry7 S7[Header.Offset7.Count];
+
+    FSeek(Header.Offset8.Offset);
+    CHSegment8 S8[Header.Offset8.Count];
+
+    FSeek(Header.SkillNames.Offset);
+    ResourceName Skills[Header.SkillNames.Count] <name=ResourceName_Name>;
+
+    FSeek(Header.Offset10.Offset);
+    CHSegment10 S10[Header.Offset10.Count];
+
+    FSeek(Header.Offset11.Offset);
+    CHSegment11 S11[Header.Offset11.Count];
+
+    FSeek(Header.Offset12.Offset);
+    CHSegment12 S12[Header.Offset12.Count];
+
+    FSeek(Header.Offset13.Offset);
+    byte VSSS[Header.Offset13.Count] <bgcolor=cDkAqua>;
+};
+
+CHFile file;

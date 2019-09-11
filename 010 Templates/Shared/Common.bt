@@ -1,0 +1,87 @@
+#ifndef CHLV_H
+#define CHLV_H
+
+#include "Shared\Bits.bt"
+
+struct POINT
+{
+  int32 x;
+  int32 y;
+};
+
+string POINT_Name(POINT &v)
+{
+  string result;
+  SPrintf( result, "x: %d, y: %d", v.x, v.y );
+  return result;
+}
+
+// AM
+struct ImageHeader
+{
+  /* 00000000 */ uint16 Width <fgcolor=cLtRed>;
+  /* 00000002 */ uint16 Height <fgcolor=cLtRed>;
+  /* 00000004 */ uint32 Level01 <fgcolor=cGray>;
+  /* 00000008 */ uint32 Level02 <fgcolor=cGray>;
+  /* 0000000C */ uint32 Level03 <fgcolor=cGray>;
+  /* 00000010 */ uint32 ImageLineIndex <fgcolor=cLtBlue>;
+  /* 00000014 */ uint32 Height32 <fgcolor=cGray>; /* same as Height */
+};
+
+struct ImageSegment
+{
+  /* 00000000*/ uint16 PageOffset <fgcolor=cLtBlue>;
+  /* 00000002*/ uint16 PageNumber <fgcolor=cLtBlue>;
+  /* 00000004*/ uint16 LeftPadding <fgcolor=cLtGreen>;
+  /* 00000006*/ uint16 SizeInBytes <fgcolor=cLtGreen>;
+};
+
+struct ImageLine
+{
+  /* 00000000 */ uint32 ImageSegmentIndex <fgcolor=cLtBlue>;
+  /* 00000004 */ uint32 ImageSegmentCount <fgcolor=cLtGreen>;
+};
+
+// LV
+struct LVEntry7
+{
+  int32 ActorInfoPtr; // Will initialize in runtime
+  byte Type; // 1 => Return -1, 2 => Text, 4 => Return 0, 3 => Continue
+  byte Segment1Index;
+  INT16 f2;
+  INT32 f3;
+  INT32 f4;
+  INT16 OX;
+  INT16 OY;
+  INT32 f6;
+  INT16 f7;
+  INT16 f8;
+  INT32 ResourceId <format=hex>;
+  INT32 f9;
+  INT32 f10;
+};
+
+struct LVEntry9
+{
+  INT16 _aX;
+  INT16 aY;
+  BYTE type;
+  BYTE bX2;
+  INT16 bY;
+  Int32Mask GVIndex1 <name=Int32Mask_Name>;
+  Int32Mask GVIndex2 <name=Int32Mask_Name>;
+  Int32Mask GVIndex3 <name=Int32Mask_Name>;
+  INT16 fX;
+  INT16 fY;
+};
+
+struct LVEntry22
+{
+  INT32 a;
+  INT32 type;
+  INT16 idx;
+  INT16 c2;
+  INT32 LV9Idx;
+};
+
+#endif

@@ -1,0 +1,35 @@
+#ifndef RESOURCES_H
+#define RESOURCES_H
+
+    struct ResourceTypeName
+    {
+        char name[16] <fgcolor=cLtGreen>; // => 0x10
+        char type[16] <fgcolor=cLtBlue>; // => 0x24
+        INT32 Size_0to12 <fgcolor=cDkGray>;
+        INT16 Index <fgcolor=cDkRed>;
+        INT16 Count <fgcolor=cLtRed>;
+    };
+    
+    string ResourceTypeName_Name(ResourceTypeName &v)
+    {
+        string result;
+        SPrintf( result, "%s: %s (Index: %d+%d)", v.type, v.name, v.Index, v.Count );
+        return result;
+    }
+
+    struct ResourceName
+    {
+        char name[20] <fgcolor=cLtGreen>; // => 0x20
+        INT32 a <fgcolor=cDkGray>;
+        INT32 Index <fgcolor=cDkRed>;
+        INT32 Count <fgcolor=cLtRed>;
+    };
+
+    string ResourceName_Name(ResourceName &v)
+    {
+        string result;
+        SPrintf( result, "%d: %s (Index: %d+%d)", v.a, v.name, v.Index, v.Count );
+        return result;
+    }
+
+#endif
