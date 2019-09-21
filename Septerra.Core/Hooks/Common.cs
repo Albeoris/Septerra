@@ -15,5 +15,10 @@ namespace Septerra.Core.Hooks
             result = 0;
             return false;
         }
+
+        public static Boolean TryProcessHotKey(UInt32 hotKey)
+        {
+            return HotKeyManager.TryHandle(hotKey);
+        }
     }
 }

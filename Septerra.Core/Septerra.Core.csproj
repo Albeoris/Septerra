@@ -100,7 +100,26 @@
     <Compile Include="Formats\Targets\ImageTarget.cs" />
     <Compile Include="Formats\Targets\MultiTarget.cs" />
     <Compile Include="Formats\Targets\SoundTarget.cs" />
+    <Compile Include="Hooks\BattleDispatcher\ActorATB.cs" />
+    <Compile Include="Hooks\BattleDispatcher\ActorInfo2.cs" />
+    <Compile Include="Hooks\BattleDispatcher\ActorInfoBattleParams.cs" />
+    <Compile Include="Hooks\BattleDispatcher\ActorInfoParams.cs" />
+    <Compile Include="Hooks\BattleDispatcher\Actor_SomeAnimationDescriptor.cs" />
+    <Compile Include="Hooks\BattleDispatcher\Actor_SomeCache.cs" />
+    <Compile Include="Hooks\BattleDispatcher\_BattleDispatcher.cs" />
+    <Compile Include="Hooks\BattleDispatcher\LVEntry21.cs" />
+    <Compile Include="Hooks\BattleDispatcher\LVEntry7.cs" />
+    <Compile Include="Hooks\BattleDispatcher\PCReference.cs" />
+    <Compile Include="Hooks\BattleDispatcher\PointF.cs" />
+    <Compile Include="Hooks\BattleDispatcher\ResourceName.cs" />
+    <Compile Include="Hooks\BattleDispatcher\SceneInstance.cs" />
+    <Compile Include="Hooks\BattleDispatcher\SC_CombatListEntry.cs" />
+    <Compile Include="Hooks\BattleDispatcher\SC_CombatListEntry_Quad.cs" />
+    <Compile Include="Hooks\HotKey.cs" />
+    <Compile Include="Hooks\HotKeyManager.cs" />
+    <Compile Include="Hooks\Main.cs" />
     <Compile Include="Hooks\QtRecord.cs" />
+    <Compile Include="Hooks\SceneManager.cs" />
     <Compile Include="ServiceProviders\TX\TxFsService.cs" />
     <Compile Include="ServiceProviders\TX\TxCachedData.cs" />
     <Compile Include="Utils\ExtensionMethodsCollection.cs" />
@@ -178,5 +197,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

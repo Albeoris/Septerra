@@ -132,7 +132,10 @@
     <ClInclude Include="Hooks\Septerra_DbRecord_Read.hpp" />
     <ClInclude Include="Hooks\Septerra_Common_ShowError.hpp" />
     <ClInclude Include="Hooks\Septerra_QtRecord_FindFile.hpp" />
+    <ClInclude Include="Hooks\Septerra_DispatchBattle.hpp" />
+    <ClInclude Include="Hooks\Septerra_Common_ProcessHotKey.hpp" />
     <ClInclude Include="libs\detours.h" />
+    <ClInclude Include="Hooks\Septerra_WinMain.hpp" />
     <ClInclude Include="System\Resource.h" />
     <ClInclude Include="System\stdafx.h" />
   </ItemGroup>
