@@ -108,11 +108,11 @@ namespace Septerra.Core
                 header.Check();
 
                 Int32 count = header.Count;
-                Int32 dataSize = header.DataSize;
+                // Int32 dataSize = header.DataSize;
 
                 Int32 headerSize = count * sizeof(TXEntry);
                 Byte[] entriesHeader = stream.ReadBytes(headerSize);
-                Byte[] data = stream.ReadBytes(dataSize);
+                Byte[] data = stream.ReadToEnd(); // .ReadBytes(dataSize); https://github.com/Albeoris/Septerra/issues/1
 
                 List<TXString> result = new List<TXString>(count);
 
@@ -130,6 +130,9 @@ namespace Septerra.Core
 
                         for (Int32 c = 0; c < entry.Size; c++)
                         {
+                            if (offset + c >= data.Length)
+                                throw new EndOfStreamException($"Entry: {i}, Offset: {offset}, Size: {entry.Size} is out of data segment: {data.Length}");
+                            
                             SByte ch = str[offset + c];
                             if (ch == 0)
                                 break;

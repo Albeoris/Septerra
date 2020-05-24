@@ -63,6 +63,14 @@ namespace Septerra.Core
             @throw:
             throw new InvalidDataException($"The unexpected value [{givenValue}] has occurred. Expected value in range [{minValue}...{maxValue}].");
         }
+        
+        public static String FileExists(String filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException(filePath);
+
+            return filePath;
+        }
 
         public static String DirectoryExists(String directoryPath)
         {

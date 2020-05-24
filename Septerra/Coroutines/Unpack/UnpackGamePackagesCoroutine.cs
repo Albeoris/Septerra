@@ -20,6 +20,8 @@ namespace Septerra
             IdxReader idx = new IdxReader(mftContent);
             IdxContent idxContent = idx.ReadContent();
 
+            TXEncoding.TryReadFromExecutable(_spec.GameDirectory.ExecutablePath);
+
             using (DbExtractor extractor = new DbExtractor(mftContent.Version, _spec.OutputDirectory))
             {
                 extractor.Rename = _spec.Rename;
