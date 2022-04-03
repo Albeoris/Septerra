@@ -23,3 +23,9 @@ convert type sourceFile [targetFile]<br/>
 <br/>
   Example: convert tx2txt 0500000B.tx "Azziz's Temple.txt"<br/>
   will convert 0500000B.tx to Azziz's Temple.txt<br/>
+
+## Color mode fix
+
+If the game throws a DirectDraw error when running windowed with the `-W` switch,
+in compatibility settings for the game executable check "Reduced color mode"
+and select 16-bit.
