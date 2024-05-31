@@ -120,6 +120,7 @@
   <ItemGroup>
     <ClInclude Include="CLR\AssemblyResolver.hpp" />
     <ClInclude Include="Debugger\Debugger.h" />
+    <ClInclude Include="Hooks\Septerra_Audio_Decode.hpp" />
     <ClInclude Include="Hooks\Septerra_TxRecord_FindString.hpp" />
     <ClInclude Include="Hooks\Septerra_TxRecord_ReleaseByResourceId.hpp" />
     <ClInclude Include="Hooks\Septerra_TxRecord_Find.hpp" />

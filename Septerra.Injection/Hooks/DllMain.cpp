@@ -17,6 +17,8 @@
 #include "Septerra_TxRecord_FindString.hpp"
 #include "Septerra_DispatchBattle.hpp"
 
+#include "Septerra_Audio_Decode.hpp"
+
 #pragma comment(lib, "detours.lib")
 #pragma unmanaged
 
@@ -43,6 +45,8 @@ namespace SepterraInjection
 		Hook(Septerra_TxRecord_ReleaseByPointer);
 		Hook(Septerra_TxRecord_ReleaseByResourceId);
 		Hook(Septerra_DispatchBattle);
+
+		Hook(Septerra_Audio_Decode);
 
 		/*Hook(Septerra_TxRecord_FindString);*/
 
