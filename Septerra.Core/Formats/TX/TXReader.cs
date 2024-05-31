@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Septerra.Core
 {
@@ -113,11 +114,13 @@ namespace Septerra.Core
                 Int32 headerSize = count * sizeof(TXEntry);
                 Byte[] entriesHeader = stream.ReadBytes(headerSize);
                 Byte[] data = stream.ReadToEnd(); // .ReadBytes(dataSize); https://github.com/Albeoris/Septerra/issues/1
+                Char[] decoded = new Char[data.Length];
 
                 List<TXString> result = new List<TXString>(count);
 
                 fixed (Byte* entriesPtr = entriesHeader)
                 fixed (Byte* dataPtr = data)
+                fixed (Char* decodedPtr = decoded)
                 {
                     TXEntry* entries = (TXEntry*)entriesPtr;
                     SByte* str = (SByte*)dataPtr;
@@ -137,11 +140,11 @@ namespace Septerra.Core
                             if (ch == 0)
                                 break;
 
-                            str[offset + c] = (SByte)TXEncoding.ToText((Byte)ch);
+                            decodedPtr[offset + c] = TXEncoding.ToText((Byte)ch);
                             size++;
                         }
 
-                        String line = new String(str, offset, size);
+                        String line = new String(decoded, offset, size);
                         result.Add(new TXString(entry.Index, line));
                     }
 

@@ -13,7 +13,7 @@ namespace Septerra.Core
         {
             using (MemoryStream sourceFile = new MemoryStream(segment.Array, 0, segment.Count))
             using (FileStream targetFile = File.Create(outputPath))
-            using (StreamWriter targetSw = new StreamWriter(targetFile, Encoding.ASCII))
+            using (StreamWriter targetSw = new StreamWriter(targetFile, Encoding.UTF8))
             {
                 IReadOnlyList<TXString> lines = TXReader.ReadStrings(sourceFile);
                 WriteStrings(lines, targetSw);

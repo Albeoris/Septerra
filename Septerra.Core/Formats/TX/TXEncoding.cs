@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Septerra.Core
 {
     public static class TXEncoding
     {
-        public static Byte ToText(Byte bt)
+        public static Char ToText(Byte bt)
         {
             if (ToChar.TryGetValue(bt, out Char value))
-                return (Byte) value;
+                return value;
 
             if (_isRealCodepage)
-                return 0xFF; // It's valid game logic
+                return (Char)0xFF; // It's valid game logic
 
             throw new NotSupportedException($"[{bt:X2}]");
         }
@@ -26,6 +27,99 @@ namespace Septerra.Core
             throw new NotSupportedException($"[{checked((Byte) bt):X2}]");
         }
 
+        private static Boolean _isRealCodepage = false;
+
+        public static void TryReadFromExecutable(String executablePath, Boolean cyrillic)
+        {
+            const Int32 offset = 0xA4430;
+            const Int32 size = 512 - 6; // 0x01 ~ 0xFD
+            
+            if (_isRealCodepage)
+                return;
+
+            if (!File.Exists(executablePath))
+                return;
+
+            Char[] encoding = GetCharset(Encoding.GetEncoding(1252));
+            Byte[] gameCodepage = TryReadCodepage();
+
+            if (gameCodepage == null)
+                return;
+
+            unsafe
+            {
+                fixed (Byte* bptr = gameCodepage)
+                {
+                    UInt16* ptr = (UInt16*) bptr;
+                    for (Int32 i = 0; i < size / 2; i++)
+                    {
+                        Byte index = checked((Byte) (i + 1));
+                        UInt16 ascii = ptr[i];
+                        if (ascii == 0)
+                            break;
+
+                        if (index < 8)
+                        {
+                            if (!ToChar.TryGetValue(index, out var old) || old != ascii)
+                                return; // Cannot validata codepage
+                        }
+                        else if (index < 0xFE && ascii <= Byte.MaxValue)
+                        {
+                            Char ch = encoding[checked((Byte)ascii)];
+                            ToChar[index] = ch;
+                        }
+                    }
+                }
+            }
+
+            ApplyExternalEncoding(executablePath, cyrillic);
+            ToByte = ToChar.Reverse();
+            _isRealCodepage = true;
+
+            Byte[] TryReadCodepage()
+            {
+                using var input = File.OpenRead(executablePath);
+
+                if (input.Length < offset + size)
+                    return null;
+
+                input.Seek(offset, SeekOrigin.Begin);
+
+                Byte[] data = new Byte[size];
+                input.EnsureRead(data, 0, size);
+
+                return data;
+            }
+        }
+
+        private static void ApplyExternalEncoding(String executablePath, Boolean cyrillic)
+        {
+            String codepagePath = executablePath + ".codepage";
+            if (cyrillic)
+            {
+                TXByteToCharMapping external = new TXByteToCharMapping(GoodOldCyrillicEncoding);
+                external.Apply(ToChar);
+
+                if (!File.Exists(codepagePath))
+                    external.SaveToFile(codepagePath);
+            }
+            else if (File.Exists(codepagePath))
+            {
+                TXByteToCharMapping external = new TXByteToCharMapping();
+                external.LoadFromFile(codepagePath);
+                external.Apply(ToChar);
+            }
+        }
+
+        private static Char[] GetCharset(Encoding encoding)
+        {
+            Byte[] values = new Byte[256];
+            for (Int32 i = 0; i < values.Length; i++)
+                values[i] = (Byte)i;
+            
+            return encoding.GetChars(values);
+        }
+        
         private static readonly Dictionary<Byte, Char> ToChar = new Dictionary<Byte, Char>
         {
             {0x01, 'a'},
@@ -166,74 +260,78 @@ namespace Septerra.Core
 
             {0xFF, ' '},
         };
-
-        private static readonly Dictionary<Char, Byte> ToByte = ToChar.Reverse();
-        private static Boolean _isRealCodepage = false;
-
-        public static void TryReadFromExecutable(String executablePath)
+        
+        private static readonly Dictionary<Byte, Char> GoodOldCyrillicEncoding = new Dictionary<Byte, Char>() 
         {
-            const Int32 offset = 0xA4430;
-            const Int32 size = 512 - 6; // 0x01 ~ 0xFD
-            
-            if (_isRealCodepage)
-                return;
+            {0x60, 'А'},
+            {0x61, 'Б'},
+            {0x62, 'В'},
+            {0x63, 'Г'},
+            {0x64, 'Д'},
+            {0x65, 'Е'},
+            {0x66, 'Ж'},
+            {0x67, 'З'},
+            {0x68, 'И'},
+            {0x69, 'Й'},
+            {0x6A, 'К'},
+            {0x6B, 'Л'},
+            {0x6C, 'М'},
+            {0x6D, 'Н'},
+            {0x6E, 'О'},
+            {0x6F, 'П'},
 
-            if (!File.Exists(executablePath))
-                return;
+            {0x70, 'Р'},
+            {0x71, 'С'},
+            {0x72, 'Т'},
+            {0x73, 'У'},
+            {0x74, 'Ф'},
+            {0x75, 'Х'},
+            {0x76, 'Ц'},
+            {0x77, 'Ч'},
+            {0x78, 'Ш'},
+            {0x79, 'Щ'},
+            {0x7A, 'Ъ'},
+            {0x7B, 'Ы'},
+            {0x7C, 'Ь'},
+            {0x7D, 'Э'},
+            {0x7E, 'Ю'},
+            {0x7F, 'Я'},
 
-            Encoding win1252 = Encoding.GetEncoding(1252);
-            Byte[] tmpB = new Byte[1];
-            Char[] tmpC = new Char[1];
+            {0x80, 'а'},
+            {0x81, 'б'},
+            {0x82, 'в'},
+            {0x83, 'г'},
+            {0x84, 'д'},
+            {0x85, 'е'},
+            {0x86, 'ж'},
+            {0x87, 'з'},
+            {0x88, 'и'},
+            {0x89, 'й'},
+            {0x8A, 'к'},
+            {0x8B, 'л'},
+            {0x8C, 'м'},
+            {0x8D, 'н'},
+            {0x8E, 'о'},
+            {0x8F, 'п'},
 
-            Byte[] buff = TryReadCodepage();
-            if (buff == null)
-                return;
-
-            unsafe
-            {
-                fixed (Byte* bptr = buff)
-                {
-                    UInt16* ptr = (UInt16*) bptr;
-                    for (Int32 i = 0; i < size / 2; i++)
-                    {
-                        Byte index = checked((Byte) (i + 1));
-                        UInt16 value = ptr[i];
-                        if (value == 0)
-                            break;
-
-                        if (index < 8)
-                        {
-                            if (!ToChar.TryGetValue(index, out var old) || old != value)
-                                return; // Cannot validata codepage
-                        }
-                        else if (index < 0xFE && value <= Byte.MaxValue)
-                        {
-                            tmpB[0] = checked((Byte) value);
-                            if (win1252.GetChars(tmpB, 0, 1, tmpC, 0) != 1)
-                                throw new NotSupportedException("if (win1252.GetChars(tmpB, 0, 1, tmpC, 0) != 1)");
-
-                            ToChar[index] = tmpC[0];
-                        }
-                    }
-                }
-            }
-
-            _isRealCodepage = true;
-
-            Byte[] TryReadCodepage()
-            {
-                using var input = File.OpenRead(executablePath);
-
-                if (input.Length < offset + size)
-                    return null;
-
-                input.Seek(offset, SeekOrigin.Begin);
-
-                Byte[] data = new Byte[size];
-                input.EnsureRead(data, 0, size);
-
-                return data;
-            }
-        }
+            {0x90, 'р'},
+            {0x91, 'с'},
+            {0x92, 'т'},
+            {0x93, 'у'},
+            {0x94, 'ф'},
+            {0x95, 'х'},
+            {0x96, 'ц'},
+            {0x97, 'ч'},
+            {0x98, 'ш'},
+            {0x99, 'щ'},
+            {0x9A, 'ъ'},
+            {0x9B, 'ы'},
+            {0x9C, 'ь'},
+            {0x9D, 'э'},
+            {0x9E, 'ю'},
+            {0x9F, 'я'},
+        };
+        
+        private static Dictionary<Char, Byte> ToByte = ToChar.Reverse();
     }
 }

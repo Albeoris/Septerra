@@ -124,8 +124,17 @@ namespace Septerra
                         case "-convert":
                             spec.Convert = true;
                             break;
+                        case "-gif":
+                            spec.ImageFormat = ImageFormat.Gif;
+                            break;
+                        case "-tiff":
+                            spec.ImageFormat = ImageFormat.Tiff;
+                            break;
                         case "-rename":
                             spec.Rename = true;
+                            break;
+                        case "-cyrillic":
+                            spec.Cyrillic = true;
                             break;
                         default:
                             throw new ArgumentException(arg, nameof(arguments));

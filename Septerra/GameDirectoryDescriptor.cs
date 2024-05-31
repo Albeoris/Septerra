@@ -12,6 +12,7 @@ namespace Septerra
             DirectoryPath = gameDirectory;
         }
 
+        //public String ExecutablePath => Path.Combine(DirectoryPath, "SR-Septerra.exe");
         public String ExecutablePath => Path.Combine(DirectoryPath, "septerra.exe");
         public String MftPath => Path.Combine(DirectoryPath, "septerra.mft");
         public String DataPath => Path.Combine(DirectoryPath, "Data");

@@ -10,6 +10,12 @@ using Septerra.Core.DB;
 
 namespace Septerra.Core
 {
+    public enum ImageFormat
+    {
+        Tiff = 1,
+        Gif = 2
+    }
+    
     public sealed class DbExtractor : IDisposable
     {
         private readonly TerrabuilderVersion _version;
@@ -23,6 +29,7 @@ namespace Septerra.Core
 
         public Boolean Rename { get; set; } = true;
         public Boolean Convert { get; set; } = true;
+        public ImageFormat ImageFormat { get; set; } = ImageFormat.Tiff;
 
         public DbExtractor(TerrabuilderVersion version, String outputDirectory)
         {
@@ -237,8 +244,20 @@ namespace Septerra.Core
                    CheckVersion(magicTag, _version.AM);
                    if (Convert)
                    {
-                       outputPath = GetOutputPath("tiff");
-                       target = ImageTarget.Instance;
+                       switch (ImageFormat)
+                       {
+                           case ImageFormat.Tiff:
+                               outputPath = GetOutputPath("tiff");
+                               target = ImageTarget.Instance;
+                               break;
+                           case ImageFormat.Gif:
+                               outputPath = GetOutputPath("zip");
+                               target = ImageTarget.Instance;
+                               break;
+                           default:
+                               throw new NotSupportedException();
+                       }
+
                    }
                    else
                    {

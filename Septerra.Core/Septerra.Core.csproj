@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Septerra.Core</RootNamespace>
     <AssemblyName>Septerra.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -46,6 +46,8 @@
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
@@ -100,6 +102,7 @@
     <Compile Include="Formats\Targets\ImageTarget.cs" />
     <Compile Include="Formats\Targets\MultiTarget.cs" />
     <Compile Include="Formats\Targets\SoundTarget.cs" />
+    <Compile Include="Formats\TX\TXByteToCharMapping.cs" />
     <Compile Include="Hooks\BattleDispatcher\ActorATB.cs" />
     <Compile Include="Hooks\BattleDispatcher\ActorInfo2.cs" />
     <Compile Include="Hooks\BattleDispatcher\ActorInfoBattleParams.cs" />

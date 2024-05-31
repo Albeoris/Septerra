@@ -1,0 +1,35 @@
+typedef byte Byte;
+typedef int32 Int32;
+typedef uint32 UInt32;
+
+struct TXHeader
+{
+  const UInt32 KnownMagicNumber = 0x30305854;
+
+  UInt32 MagicNumber;
+  Int32 Count;
+  Int32 DataSize <bgcolor=0xFF00FF>;
+};
+
+struct TXEntry
+{
+  Int32 Index;
+  UInt32 Offset <bgcolor=0x0000FF>;
+  Int32 Size;
+
+  local long pos = FTell();
+  
+  FSeek(Offset);
+  string Text;
+
+  FSeek(pos);
+};
+
+TXHeader header;
+TXEntry entries[header.Count] <optimize=false, name=TXEntry_Text>;;
+Byte DataSize[header.DataSize];
+
+string TXEntry_Text(TXEntry &v)
+{
+  return v.Text;
+}

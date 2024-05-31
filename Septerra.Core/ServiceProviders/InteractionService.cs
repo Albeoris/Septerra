@@ -8,11 +8,12 @@ namespace Septerra.Core.Hooks
     public sealed class InteractionService : IService
     {
         public readonly String ExecutablePath = Asserts.FileExists(Path.GetFullPath("septerra.exe"));
+        //public readonly String ExecutablePath = Asserts.FileExists(Path.GetFullPath("SR-Septerra.exe"));
         public readonly String DataDirectoryPath = Asserts.DirectoryExists(Path.GetFullPath("Data"));
 
         public InteractionService()
         {
-            TXEncoding.TryReadFromExecutable(ExecutablePath);
+            TXEncoding.TryReadFromExecutable(ExecutablePath, cyrillic: false);
         }
     }
 }
