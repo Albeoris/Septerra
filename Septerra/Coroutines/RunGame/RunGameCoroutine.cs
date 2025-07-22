@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using Microsoft.Win32.SafeHandles;
+using Septerra.Core.Hooks;
 
 namespace Septerra
 {
@@ -30,8 +32,28 @@ namespace Septerra
                 unpack.Execute();
             }
 
+            if (!_spec.SkipSRDownload && !_spec.GameDirectory.IsSRExecutableExists)
+            {
+                try
+                {
+                    DownloadSrSpecPreprocessor downloadSrSpec = new() { GameDirectory = _spec.GameDirectory };
+                    downloadSrSpec.Preprocess();
+
+                    DownloadSrCoroutine downloadSr = new(downloadSrSpec);
+                    downloadSr.Execute();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Failed to download Septerra-SR. To skip this step run the launcher with -skipsrdownload argument.");
+                    Console.WriteLine(ex);
+                }
+            }
+
             MyProcess process = new MyProcess();
-            process.StartInfo = new ProcessStartInfo(_spec.GameDirectory.ExecutablePath, _spec.GameArguments);
+            if (_spec.GameDirectory.IsSRExecutableExists)
+                process.StartInfo = new ProcessStartInfo(_spec.GameDirectory.SRExecutablePath, _spec.GameArguments);
+            else
+                process.StartInfo = new ProcessStartInfo(_spec.GameDirectory.ExecutablePath, _spec.GameArguments);
             process.StartInfo.WorkingDirectory = _spec.GameDirectory.DirectoryPath;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
@@ -47,12 +69,25 @@ namespace Septerra
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
 
-                var dllPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Septerra.Injection.dll");
-                if (!File.Exists(dllPath))
-                    throw new FileNotFoundException(dllPath);
-
+                var dllPath = _spec.GameInjection.DllPath;
                 var unicodeDllPath = Encoding.Unicode.GetBytes(dllPath);
 
+                String gameInjectionHookAddressTablePath = Path.Combine(_spec.GameDirectory.DirectoryPath, nameof(GameInjectionHookAddressTable));
+                using (FileStream addressOutput = File.Create(gameInjectionHookAddressTablePath))
+                {
+                    unsafe
+                    {
+                        Int32 size = Marshal.SizeOf<GameInjectionHookAddressTable>();
+                        Byte[] buffer = new Byte[size];
+
+                        fixed (Byte* bufferPtr = buffer)
+                            Marshal.StructureToPtr(_spec.GameInjection.AddressTable, (IntPtr)bufferPtr, false);
+
+                        addressOutput.Write(buffer, 0, size);
+                        addressOutput.Flush();
+                    }
+                }
+                
                 using (SafeProcessHandle processHandle = new SafeProcessHandle(process.Id, ProcessAccessFlags.All, false))
                 using (SafeVirtualMemoryHandle memoryHandle = processHandle.Allocate(unicodeDllPath.Length, AllocationType.Commit, MemoryProtection.ReadWrite))
                 {

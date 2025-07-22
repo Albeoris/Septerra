@@ -1,7 +1,11 @@
+#include <fstream>
+
 #include "../libs/detours.h"
 #include "../CLR/AssemblyResolver.hpp"
 #include "../Debugger/Debugger.h"
+#include "GameInjectionHookAddressTable.hpp"
 #include "Septerra_WinMain.hpp"
+#include "Septerra_HandleWindowsMessage.hpp"
 #include "Septerra_Common_ShowError.hpp"
 #include "Septerra_Common_ProcessHotKey.hpp"
 #include "Septerra_DbRecord_Close.hpp"
@@ -20,16 +24,38 @@
 #pragma comment(lib, "detours.lib")
 #pragma unmanaged
 
-#define Hook(delegaeName) if (DetourAttach((PVOID*)(&O_##delegaeName), H_##delegaeName)) return FALSE
+#define Hook(delegaeName) O_##delegaeName = reinterpret_cast<##delegaeName>(address_table.##delegaeName); if (DetourAttach((PVOID*)(&O_##delegaeName), H_##delegaeName)) return FALSE
 
 namespace SepterraInjection
 {
+	bool deserialize(const std::string& filename, UnmanagedGameInjectionHookAddressTable& data)
+	{
+		std::ifstream input(filename, std::ios::binary);
+		if (!input) {
+			std::cerr << "Unable to open file " << filename << std::endl;
+			return false;
+		}
+
+		input.read(reinterpret_cast<char*>(&data), sizeof(UnmanagedGameInjectionHookAddressTable));
+		if (!input) {
+			std::cerr << "Error reading data from file " << filename << std::endl;
+			return false;
+		}
+
+		input.close();
+		return true;
+	}
+	
 	BOOL DllProcessAttach()
 	{
+		UnmanagedGameInjectionHookAddressTable address_table;
+		deserialize("GameInjectionHookAddressTable", address_table);
+
 		if (DetourTransactionBegin()) return FALSE;
 		if (DetourUpdateThread(GetCurrentThread())) return FALSE;
 
 		Hook(Septerra_WinMain);
+		Hook(Septerra_HandleWindowsMessage);
 		Hook(Septerra_Common_ShowError);
 		Hook(Septerra_Common_ProcessHotKey);
 		Hook(Septerra_DbRecord_Close);
@@ -76,7 +102,7 @@ namespace SepterraInjection
 	extern "C" __declspec(dllexport)
 	BOOL WINAPI DllMain(HMODULE dllInstance, DWORD callReason, LPVOID reserved)
 	{
-		 // LaunchDebugger(); // Uncomment to debug, unmanaged mode only!
+		// LaunchDebugger(); // Uncomment to debug, unmanaged mode only!
 
 		switch (callReason)
 		{

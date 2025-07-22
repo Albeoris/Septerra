@@ -14,6 +14,8 @@ namespace Septerra
 
         public void Execute()
         {
+            Console.WriteLine("Extracting...");
+            
             MftReader mft = MftReader.Create(_spec.GameDirectory.DirectoryPath);
             MftContent mftContent = mft.ReadContent();
 

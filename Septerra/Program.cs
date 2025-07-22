@@ -1,11 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
+using System.Linq;
 using System.Text;
 using System.Threading;
+using CsDebugScript;
+using CsDebugScript.DwarfSymbolProvider;
+using CsDebugScript.Engine;
+using PeNet;
+using PeNet.Header.Pe;
 using Septerra.Core;
+using Process = CsDebugScript.Process;
 
 namespace Septerra
 {
@@ -58,6 +66,12 @@ namespace Septerra
                     StringBuilder sb = new StringBuilder();
                     while(arguments.TryGetNext(out var arg))
                     {
+                        if (arg == "-skipsrdownload")
+                        {
+                            spec.SkipSRDownload = true;
+                            continue;
+                        }
+
                         sb.Append(arg);
                         sb.Append(' ');
                     }

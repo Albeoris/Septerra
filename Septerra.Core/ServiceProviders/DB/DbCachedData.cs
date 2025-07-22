@@ -33,6 +33,9 @@ namespace Septerra.Core.DB
 
         public unsafe Int32 Read(Byte* output, Int32 outputSize)
         {
+            if (outputSize == 0)
+                return outputSize;
+            
             Int32 size = Math.Min(Size - _offset, Asserts.Positive(outputSize));
             if (size == 0)
                 return size;

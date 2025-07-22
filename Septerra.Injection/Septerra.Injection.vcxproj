@@ -114,12 +114,14 @@
   <ItemGroup>
     <ClCompile Include="Debugger\Debugger.cpp" />
     <ClCompile Include="Hooks\DllMain.cpp" />
+    <ClCompile Include="Hooks\GameInjectionHookAddressTable.hpp" />
     <ClCompile Include="System\AssemblyInfo.cpp" />
     <ClCompile Include="System\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CLR\AssemblyResolver.hpp" />
     <ClInclude Include="Debugger\Debugger.h" />
+    <ClInclude Include="Hooks\Septerra_HandleWindowsMessage.hpp" />
     <ClInclude Include="Hooks\Septerra_TxRecord_FindString.hpp" />
     <ClInclude Include="Hooks\Septerra_TxRecord_ReleaseByResourceId.hpp" />
     <ClInclude Include="Hooks\Septerra_TxRecord_Find.hpp" />

@@ -9,6 +9,7 @@ obj/
 Debug/
 /.idea/
 /.vs/
+.vs
 /ipch/
 *.suo
 *.user

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
+using Septerra.WindowsMessages;
 
 namespace Septerra.Core.Hooks
 {
@@ -23,11 +25,11 @@ namespace Septerra.Core.Hooks
 
         private static Boolean ProcessBattle4(UInt32 hotKey)
         {
-            if (hotKey == 'F')
-            {
-                Current = HotKey.NextTurn;
-                return true;
-            }
+            // if (hotKey == 'F')
+            // {
+            //     Current = HotKey.NextTurn;
+            //     return true;
+            // }
 
             return false;
         }
@@ -37,6 +39,36 @@ namespace Septerra.Core.Hooks
             if (Current == hotKey)
             {
                 Current = HotKey.None;
+                return true;
+            }
+
+            return false;
+        }
+
+        public static Boolean TryHandle(KeyDownMessageInfo keyDown)
+        {
+            if (keyDown.RepeatCount > 0)
+                return false;
+            
+            switch (SceneManager.CurrentSceneType)
+            {
+                case 4:
+                    return WhenKeyDownInBattle(keyDown);
+            }
+
+            return false;
+        }
+
+        public static Boolean TryHandle(KeyUpMessageInfo keyUp)
+        {
+            return false;
+        }
+        
+        private static Boolean WhenKeyDownInBattle(KeyDownMessageInfo keyDown)
+        {
+            if (keyDown.VirtualKeyCode == Keys.F)
+            {
+                Current = HotKey.NextTurn;
                 return true;
             }
 
