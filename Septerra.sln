@@ -28,11 +28,11 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Debug|x86.ActiveCfg = Debug|Win32
-		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Debug|x86.Build.0 = Debug|Win32
 		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Release|Any CPU.ActiveCfg = Release|Win32
 		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Release|x86.ActiveCfg = Release|Win32
 		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Release|x86.Build.0 = Release|Win32
+		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Debug|x86.ActiveCfg = Release|Win32
+		{7F86FF0F-8D61-439B-BAE4-79456EA34053}.Debug|x86.Build.0 = Release|Win32
 		{82CFC7CA-998C-4653-A4E5-9756C5BA85F9}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{82CFC7CA-998C-4653-A4E5-9756C5BA85F9}.Debug|x86.ActiveCfg = Debug|x86
 		{82CFC7CA-998C-4653-A4E5-9756C5BA85F9}.Debug|x86.Build.0 = Debug|x86

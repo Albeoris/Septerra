@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using BitMiracle.LibTiff.Classic;
 using Septerra.Core.AM;
 using System.IO.Compression;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -25,13 +26,184 @@ namespace Septerra.Core
                 switch (extension)
                 {
                     case ".zip":
-                        ExtractZip(sourceFile, outputPath, in header);
+                        String fileName = Path.GetFileNameWithoutExtension(outputPath);
+                        if (fileName.StartsWith("01001F4A"))
+                            ExtractAtlas(sourceFile, outputPath, in header);
+                        else
+                            ExtractZip(sourceFile, outputPath, in header);
                         break;
                     case ".tiff":
                         ExtractTiff(sourceFile, outputPath, in header);
                         break;
                     default:
                         throw new NotSupportedException(extension);
+                }
+            }
+        }
+
+        private unsafe void ExtractAtlas(MemoryStream sourceFile, String outputPath, in AMHeader header)
+        {
+            String fileName = Path.GetFileNameWithoutExtension(outputPath);
+            if (!fileName.StartsWith("01001F4A_"))
+                throw new NotSupportedException($"Export to .gif is not available for the resource: {fileName}");
+
+            sourceFile.SetPosition(header.AnimationOffset);
+            AMAnimation[] animations = sourceFile.ReadStructs<AMAnimation>(header.AnimationCount);
+
+            sourceFile.SetPosition(header.FrameOffset);
+            AMFrame[] freames = sourceFile.ReadStructs<AMFrame>(header.FrameCount);
+
+            ColorPalette[] colorPalettes = ReadColorPalettes(sourceFile, in header);
+            Byte[][] actPalettes = ReadActPalettes(sourceFile, in header);
+
+            sourceFile.SetPosition(header.ImageHeaderOffset);
+            AMImageHeader[] frames = sourceFile.ReadStructs<AMImageHeader>(header.ImageHeaderCount);
+
+            Dictionary<Int32, Int32> frameDefaultPalettes = GetDefaultFramePalettes(freames, in header);
+
+            sourceFile.SetPosition(header.ImageSegmentOffset);
+            AMImageSegment[] segments = sourceFile.ReadStructs<AMImageSegment>(header.ImageSegmentCount);
+
+            sourceFile.SetPosition(header.ImageLineOffset);
+            AMImageLine[] lines = sourceFile.ReadStructs<AMImageLine>(header.ImageLineCount);
+
+            ImageMeta meta = new ImageMeta();
+            meta.SetAnimationType(header.AnimationType);
+            meta.SetAnimation(animations);
+            meta.SetFrames(freames);
+            var xmlMeta = meta.ToXml();
+
+            sourceFile.SetPosition(header.ImageContentOffset);
+
+            // Find maximum frame dimensions for grid cell size
+            int maxFrameWidth = 0;
+            int maxFrameHeight = 0;
+            foreach (var frame in frames)
+            {
+                if (frame.Width > maxFrameWidth)
+                    maxFrameWidth = frame.Width;
+                if (frame.Height > maxFrameHeight)
+                    maxFrameHeight = frame.Height;
+            }
+
+            // Calculate grid dimensions with 3px padding
+            int cellWidth = maxFrameWidth + 3;
+            int cellHeight = maxFrameHeight + 3;
+            int framesPerRow = Math.Max(1, 2048 / cellWidth); // Max texture width
+            int rowCount = (frames.Length + framesPerRow - 1) / framesPerRow;
+            int atlasWidth = framesPerRow * cellWidth;
+            int atlasHeight = rowCount * cellHeight;
+
+            fixed (AMImageSegment* linePtr = segments)
+            fixed (AMImageLine* lineExPtr = lines)
+            {
+                using (FileStream output = File.Create(outputPath))
+                using (ZipArchive zip = new ZipArchive(output, ZipArchiveMode.Create, leaveOpen: true, Encoding.UTF8))
+                {
+                    // Add metadata
+                    ZipArchiveEntry metaEntry = zip.CreateEntry($"{fileName}_Meta.xml");
+                    using (Stream entryStream = metaEntry.Open())
+                        entryStream.Write(xmlMeta, 0, xmlMeta.Length);
+
+                    // Create atlas bitmap in memory
+                    using (Bitmap atlas = new Bitmap(atlasWidth, atlasHeight, PixelFormat.Format8bppIndexed))
+                    {
+                        atlas.Palette = colorPalettes[0]; // Use first palette for atlas
+
+                        var atlasData = atlas.LockBits(new Rectangle(Point.Empty, atlas.Size), ImageLockMode.WriteOnly, atlas.PixelFormat);
+
+                        // Clear atlas
+                        unsafe
+                        {
+                            byte* atlasPtr = (byte*)atlasData.Scan0;
+                            for (int y = 0; y < atlasHeight; y++)
+                            {
+                                byte* row = atlasPtr + y * atlasData.Stride;
+                                for (int x = 0; x < atlasWidth; x++)
+                                    row[x] = 0;
+                            }
+                        }
+
+                        // Atlas layout data
+                        var atlasFrames = new List<object>();
+
+                        // Place frames in grid
+                        for (Int32 frameIndex = 0; frameIndex < frames.Length; frameIndex++)
+                        {
+                            AMImageHeader frame = frames[frameIndex];
+
+                            int gridX = frameIndex % framesPerRow;
+                            int gridY = frameIndex / framesPerRow;
+                            int startX = gridX * cellWidth;
+                            int startY = gridY * cellHeight;
+
+                            // Extract frame data
+                            Byte[] buff = new Byte[frame.Width];
+                            AMImageLine* lineEx = &lineExPtr[Asserts.InRange(frame.ImageLineIndex, 0, (UInt32)header.ImageLineCount)];
+
+                            for (Int32 row = 0; row < frame.Height; row++, lineEx++)
+                            {
+                                fixed (Byte* buffPtr = buff)
+                                    Kernel32.ZeroMemory(buffPtr, buff.Length);
+
+                                Int32 offset = 0;
+                                for (Int32 i = 0; i < lineEx->ImageSegmentCount; i++)
+                                {
+                                    AMImageSegment line = linePtr[Asserts.InRange((Int32)lineEx->ImageSegmentIndex + i, 0, header.ImageSegmentCount)];
+                                    offset += line.LeftPadding;
+
+                                    if (line.SizeInBytes > 0)
+                                    {
+                                        sourceFile.SetPosition(header.ImageContentOffset + line.Offset);
+                                        sourceFile.EnsureRead(buff, offset, line.SizeInBytes);
+                                        offset += line.SizeInBytes;
+                                    }
+                                }
+
+                                if (offset != buff.Length)
+                                    throw new NotSupportedException();
+
+                                // Copy frame row to atlas
+                                unsafe
+                                {
+                                    byte* atlasPtr = (byte*)atlasData.Scan0;
+                                    byte* atlasRow = atlasPtr + (startY + row) * atlasData.Stride + startX;
+                                    fixed (byte* buffPtr = buff)
+                                    {
+                                        for (int x = 0; x < frame.Width; x++)
+                                            atlasRow[x] = buffPtr[x];
+                                    }
+                                }
+                            }
+
+                            // Add frame info
+                            atlasFrames.Add(new
+                            {
+                                index = frameIndex,
+                                x = startX,
+                                y = startY,
+                                width = frame.Width,
+                                height = frame.Height,
+                                paletteIndex = frameDefaultPalettes.TryGetValue(frameIndex, out var palIdx) ? palIdx : 0
+                            });
+                        }
+
+                        atlas.UnlockBits(atlasData);
+
+                        // Save atlas to zip
+                        ZipArchiveEntry atlasEntry = zip.CreateEntry($"{fileName}_atlas.gif");
+                        using (Stream entryStream = atlasEntry.Open())
+                            atlas.Save(entryStream, System.Drawing.Imaging.ImageFormat.Gif);
+                    }
+
+                    // Add palettes
+                    for (Int32 paletteIndex = 0; paletteIndex < actPalettes.Length; paletteIndex++)
+                    {
+                        Byte[] actPalette = actPalettes[paletteIndex];
+                        ZipArchiveEntry actEntry = zip.CreateEntry($"{fileName}_Palette_{paletteIndex:D3}.act");
+                        using (Stream entryStream = actEntry.Open())
+                            entryStream.Write(actPalette, 0, actPalette.Length);
+                    }
                 }
             }
         }
@@ -78,7 +250,7 @@ namespace Septerra.Core
 
                     Byte[] colors = new Byte[256];
                     for (Int32 i = 0; i < colors.Length; i++)
-                        colors[i] = checked((Byte) i);
+                        colors[i] = checked((Byte)i);
 
                     for (Int32 paletteIndex = 0; paletteIndex < actPalettes.Length; paletteIndex++)
                     {
@@ -111,10 +283,10 @@ namespace Septerra.Core
                                 paletteIndex = 0;
 
                             bitmap.Palette = colorPalettes[paletteIndex];
-                            
+
                             Byte[] buff = new Byte[frame.Width];
 
-                            AMImageLine* lineEx = &lineExPtr[Asserts.InRange(frame.ImageLineIndex, 0, (UInt32) header.ImageLineCount)];
+                            AMImageLine* lineEx = &lineExPtr[Asserts.InRange(frame.ImageLineIndex, 0, (UInt32)header.ImageLineCount)];
 
                             for (Int32 row = 0; row < frame.Height; row++, lineEx++)
                             {
@@ -124,7 +296,7 @@ namespace Septerra.Core
                                 Int32 offset = 0;
                                 for (Int32 i = 0; i < lineEx->ImageSegmentCount; i++)
                                 {
-                                    AMImageSegment line = linePtr[Asserts.InRange((Int32) lineEx->ImageSegmentIndex + i, 0, header.ImageSegmentCount)];
+                                    AMImageSegment line = linePtr[Asserts.InRange((Int32)lineEx->ImageSegmentIndex + i, 0, header.ImageSegmentCount)];
                                     offset += line.LeftPadding;
 
                                     if (line.SizeInBytes > 0)
@@ -142,7 +314,7 @@ namespace Septerra.Core
                                 Marshal.Copy(buff, 0, bitmapData.Scan0, buff.Length);
                                 bitmap.UnlockBits(bitmapData);
                             }
-                            
+
                             ZipArchiveEntry gifEntry = zip.CreateEntry($"Image {frameIndex:D3}.gif");
                             using (Stream entrySteam = gifEntry.Open())
                                 bitmap.Save(entrySteam, System.Drawing.Imaging.ImageFormat.Gif);

@@ -34,6 +34,7 @@ namespace Septerra.Core.Sources
                 String text = line.Substring(separatorIndex + 1);
                 if (prefix == "XXXXX")
                 {
+                    sb.Append('\n');
                     sb.Append(text);
                 }
                 else if (Int32.TryParse(prefix, NumberStyles.Integer, CultureInfo.InvariantCulture, out var index))
