@@ -70,7 +70,7 @@ namespace Septerra
                 process.BeginErrorReadLine();
 
                 var dllPath = _spec.GameInjection.DllPath;
-                var unicodeDllPath = Encoding.Unicode.GetBytes(dllPath);
+                var unicodeDllPath = Encoding.Unicode.GetBytes(dllPath + '\0');
 
                 String gameInjectionHookAddressTablePath = Path.Combine(_spec.GameDirectory.DirectoryPath, nameof(GameInjectionHookAddressTable));
                 using (FileStream addressOutput = File.Create(gameInjectionHookAddressTablePath))
